@@ -308,8 +308,48 @@ private:
 	int height, width;
 
 public:
-	Scene(Vector3 inputCamera, objects, int width, int height) : {}
+	Scene(Vector3 inputCamera, inputObjects, int inputWidth, int inputHeight) : camera(inputCamera), objects(inputObjects), width(inputWidth), height(inputHeight) {}
 
+
+	void setCamera(Vector3 inputCamera)
+	{
+		camera = inputCamera;
+	}
+
+	void setObjects(inputObjects)
+	{
+		objects = inputObjects;
+	}
+
+	void setHeight(int inputHeight)
+	{
+		height = inputHeight;
+	}
+
+	void setWidth(int inputWidth)
+	{
+		width = inputWidth;
+	}
+
+	Vector3 getCamera()
+	{
+		return camera;
+	}
+
+	getObjects()
+	{
+		return objects;
+	}
+
+	int getHeight()
+	{
+		return height;
+	}
+
+	int getWidth()
+	{
+		return width;
+	}
 };
 
 void main()
