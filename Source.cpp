@@ -93,7 +93,7 @@ public:
 		return (*this) / magnitude();
 	}
 
-	void printVector()
+	void printVector() const
 	{
 		cout << "(" << x << ", " << y << ", " << z << ")" << endl;
 	}
@@ -163,7 +163,7 @@ public:
 
 	int hexCharToDecInt(char inputChar)
 	{
-		string tempString = " ";
+		string tempString = "";
 
 		tempString[0] = inputChar;
 
@@ -403,7 +403,7 @@ public:
 		pixels.writeFile();
 	}
 
-	Color rayTrace(Ray inputRay, Scene &inputScene)
+	Color rayTrace(Ray &inputRay, Scene &inputScene)
 	{
 		Color color;
 
@@ -420,6 +420,8 @@ public:
 		Vector3 hitPosition = inputRay.getOrigin() + inputRay.getDirection() * hitDistance;
 
 		color = color + colorAt(objectHit, hitPosition, inputScene);
+
+		return color;
 	}
 
 	void findNearest(Object* &objectHit, float &hitDistance, Ray &inputRay, Scene& inputScene)
@@ -443,7 +445,7 @@ public:
 		hitDistance = minimumDistance;
 	}
 
-	Color colorAt(Object* objecHit, Vector3 hitPosition, Scene &inputScene)
+	Color colorAt(Object* &objecHit, Vector3 &hitPosition, Scene &inputScene)
 	{
 		return (*objecHit).getMaterial();
 	}

@@ -35,3 +35,6 @@ x64/Debug/vc143.idb
 x64/Debug/vc143.pdb
 .vs/Raytracing Render Engine/v17/.suo
 .vs/Raytracing Render Engine/v17/Browse.VC.db
+.vs/Raytracing Render Engine/v17/.suo
+.vs/Raytracing Render Engine/v17/Browse.VC.db
+*.db
