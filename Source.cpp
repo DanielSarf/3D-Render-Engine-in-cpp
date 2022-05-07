@@ -4,6 +4,7 @@
 #include <ctime>
 #include <fstream>
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -91,6 +92,11 @@ public:
 	{
 		return (*this) / magnitude();
 	}
+
+	void printVector()
+	{
+		cout << "(" << x << ", " << y << ", " << z << ")" << endl;
+	}
 };
 
 class Color
@@ -169,7 +175,7 @@ class Image
 {
 private:
 	int height, width;
-	Color **pixels; //pointer of pointers
+	Color **pixels;
 
 public:
 	Image(int inputWidth, int inputHeight) : width(inputWidth), height(inputHeight)
@@ -266,16 +272,15 @@ public:
 	}
 };
 
-class Sphere
+class Object
 {
 private:
 	Vector3 location;
 	float radius;
-	Material material;
+	Color material;
 
 public:
-	Sphere(Vector3 inputLocation, float inputRadius, Material inputMaterial) : location(inputLocation), radis(inputRadius), material(inputMaterial) {}
-
+	Object(Vector3 inputLocation, float inputRadius, Color inputMaterial) : location(inputLocation), radius(inputRadius), material(inputMaterial) {}
 
 	float intersections(Ray ray)
 	{
@@ -290,6 +295,7 @@ public:
 		if (discriminant >= 0)
 		{
 			float distance = (-b - sqrt(discriminant)) / 2;
+
 			if (distance > 0)
 			{
 				return distance;
@@ -298,27 +304,27 @@ public:
 
 		return NULL;
 	}
+
+	Color getMaterial()
+	{
+		return material;
+	}
 };
 
 class Scene
 {
 private:
 	Vector3 camera;
-	objects;
+	vector<Object> *objects;
 	int height, width;
 
 public:
-	Scene(Vector3 inputCamera, inputObjects, int inputWidth, int inputHeight) : camera(inputCamera), objects(inputObjects), width(inputWidth), height(inputHeight) {}
+	Scene(Vector3 inputCamera, vector<Object> *inputObjects, int inputWidth, int inputHeight) : camera(inputCamera), objects(inputObjects), width(inputWidth), height(inputHeight) {}
 
 
 	void setCamera(Vector3 inputCamera)
 	{
 		camera = inputCamera;
-	}
-
-	void setObjects(inputObjects)
-	{
-		objects = inputObjects;
 	}
 
 	void setHeight(int inputHeight)
@@ -336,7 +342,7 @@ public:
 		return camera;
 	}
 
-	getObjects()
+	vector<Object>* getObjects()
 	{
 		return objects;
 	}
@@ -352,21 +358,106 @@ public:
 	}
 };
 
+class RenderEngine
+{
+private:
+	int height, width;
+	float aspectRatio, x0, x1, xStep, y0, y1, yStep;
+	Vector3 camera;
+	Image pixels;
+
+public:
+	RenderEngine(Scene &inputScene) : pixels(inputScene.getWidth(), inputScene.getHeight())
+	{
+		height = inputScene.getHeight();
+		width = inputScene.getWidth();
+
+		aspectRatio = float(width) / height;
+
+		x0 = -1;
+		x1 = 1;
+		xStep = (x1 - x0) / (width - 1);
+
+		y0 = -1 / aspectRatio;
+		y1 = 1 / aspectRatio;
+		yStep = (y1 - y0) / (height - 1);
+
+		camera = inputScene.getCamera();
+
+		float x, y;
+
+		for (int i = 0; i < height; i++)
+		{
+			y = y0 + i * yStep;
+
+			for (int j = 0; j < width; j++)
+			{
+				x = x0 + j * xStep;
+
+				Ray ray(camera, (Vector3(x, y, 0) - camera));
+
+				pixels.setPixel(j, i, rayTrace(ray, inputScene));
+			}
+		}
+
+		pixels.writeFile();
+	}
+
+	Color rayTrace(Ray inputRay, Scene &inputScene)
+	{
+		Color color;
+
+		float hitDistance = NULL;
+		Object* objectHit = NULL;
+
+		findNearest(objectHit, hitDistance, inputRay, inputScene);
+
+		if (objectHit == NULL)
+		{
+			return color;
+		}
+
+		Vector3 hitPosition = inputRay.getOrigin() + inputRay.getDirection() * hitDistance;
+
+		color = color + colorAt(objectHit, hitPosition, inputScene);
+	}
+
+	void findNearest(Object* &objectHit, float &hitDistance, Ray &inputRay, Scene& inputScene)
+	{
+		float minimumDistance = NULL;
+
+		for (int i = 0; i < (*inputScene.getObjects()).size(); i++)
+		{
+			float distance = NULL;
+
+			distance = (*inputScene.getObjects())[i].intersections(inputRay);
+
+			if (distance != NULL && (objectHit == NULL || distance < minimumDistance))
+			{
+				minimumDistance = distance;
+
+				objectHit = &(*inputScene.getObjects())[i];
+			}
+		}
+
+		hitDistance = minimumDistance;
+	}
+
+	Color colorAt(Object* objecHit, Vector3 hitPosition, Scene &inputScene)
+	{
+		return (*objecHit).getMaterial();
+	}
+};
+
 void main()
 {
-	int width = 320;
-
-	int height = 200;
-
 	Vector3 camera(0, 0, -1);
 
-	objects = [Sphere(Vector3(0, 0, 0), 0.5, Color("#FF0000"))];
+	vector<Object> objects;
 
-	Scene scene(camera, objects, width, height);
+	objects.push_back(Object(Vector3(0, 0, 0), 0.5, Color("#FF0000")));
 
-	engine.RenderEngine();
+	Scene scene(camera, &objects, 320, 200);
 
-	image = engine.render(scene);
-
-	image.writeFile();
+	RenderEngine engine(scene);
 }
