@@ -161,7 +161,7 @@ public:
 		return b;
 	}
 
-	int hexCharToDecInt(char inputChar)
+	int hexCharToDecInt(char inputChar) const
 	{
 		string tempString = "";
 
@@ -178,7 +178,7 @@ private:
 	Color **pixels;
 
 public:
-	Image(int inputWidth, int inputHeight) : width(inputWidth), height(inputHeight)
+	Image(int inputWidth, int inputHeight) : width(inputWidth), height(inputHeight)//
 	{
 		pixels = new Color*[inputHeight];
 
@@ -193,12 +193,12 @@ public:
 		}
 	}
 
-	void setPixel(int w, int h, Color color)
+	void setPixel(int w, int h, Color color) const
 	{
 		pixels[h][w] = color;
 	}
 
-	void writeFile()
+	void writeFile() const
 	{
 		time_t curr_time;
 		tm* curr_tm;
@@ -261,12 +261,12 @@ public:
 		direction = inputDirection.normalize();
 	}
 
-	Vector3 getOrigin()
+	Vector3 getOrigin() const
 	{
 		return origin;
 	}
 
-	Vector3 getDirection()
+	Vector3 getDirection() const
 	{
 		return direction;
 	}
@@ -282,7 +282,7 @@ private:
 public:
 	Object(Vector3 inputLocation, float inputRadius, Color inputMaterial) : location(inputLocation), radius(inputRadius), material(inputMaterial) {}
 
-	float intersections(Ray ray)
+	float intersections(Ray &ray) const
 	{
 		Vector3 sphereToRay = ray.getOrigin() - location;
 
@@ -305,7 +305,7 @@ public:
 		return NULL;
 	}
 
-	Color getMaterial()
+	Color getMaterial() const
 	{
 		return material;
 	}
@@ -319,10 +319,9 @@ private:
 	int height, width;
 
 public:
-	Scene(Vector3 inputCamera, vector<Object> *inputObjects, int inputWidth, int inputHeight) : camera(inputCamera), objects(inputObjects), width(inputWidth), height(inputHeight) {}
+	Scene(Vector3 &inputCamera, vector<Object> *inputObjects, int inputWidth, int inputHeight) : camera(inputCamera), objects(inputObjects), width(inputWidth), height(inputHeight) {}
 
-
-	void setCamera(Vector3 inputCamera)
+	void setCamera(Vector3 &inputCamera)
 	{
 		camera = inputCamera;
 	}
@@ -337,22 +336,22 @@ public:
 		width = inputWidth;
 	}
 
-	Vector3 getCamera()
+	Vector3 getCamera() const
 	{
 		return camera;
 	}
 
-	vector<Object>* getObjects()
+	vector<Object>* getObjects() const
 	{
 		return objects;
 	}
 
-	int getHeight()
+	int getHeight() const
 	{
 		return height;
 	}
 
-	int getWidth()
+	int getWidth() const
 	{
 		return width;
 	}
@@ -403,7 +402,7 @@ public:
 		pixels.writeFile();
 	}
 
-	Color rayTrace(Ray &inputRay, Scene &inputScene)
+	Color rayTrace(Ray &inputRay, Scene &inputScene) const
 	{
 		Color color;
 
@@ -424,7 +423,7 @@ public:
 		return color;
 	}
 
-	void findNearest(Object* &objectHit, float &hitDistance, Ray &inputRay, Scene& inputScene)
+	void findNearest(Object* &objectHit, float &hitDistance, Ray &inputRay, Scene& inputScene) const
 	{
 		float minimumDistance = NULL;
 
@@ -445,7 +444,7 @@ public:
 		hitDistance = minimumDistance;
 	}
 
-	Color colorAt(Object* &objecHit, Vector3 &hitPosition, Scene &inputScene)
+	Color colorAt(Object* &objecHit, Vector3 &hitPosition, Scene &inputScene) const
 	{
 		return (*objecHit).getMaterial();
 	}
