@@ -139,7 +139,27 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Resource Files\Color.cpp" />
+    <ClCompile Include="Resource Files\Image.cpp" />
+    <ClCompile Include="Resource Files\Light.cpp" />
+    <ClCompile Include="Resource Files\Material.cpp" />
+    <ClCompile Include="Resource Files\Object.cpp" />
+    <ClCompile Include="Resource Files\Ray.cpp" />
+    <ClCompile Include="Resource Files\RenderEngine.cpp" />
+    <ClCompile Include="Resource Files\Scene.cpp" />
+    <ClCompile Include="Resource Files\Vector3.cpp" />
     <ClCompile Include="Source.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Header Files\Color.h" />
+    <ClInclude Include="Header Files\Image.h" />
+    <ClInclude Include="Header Files\Light.h" />
+    <ClInclude Include="Header Files\Material.h" />
+    <ClInclude Include="Header Files\Object.h" />
+    <ClInclude Include="Header Files\Ray.h" />
+    <ClInclude Include="Header Files\RenderEngine.h" />
+    <ClInclude Include="Header Files\Scene.h" />
+    <ClInclude Include="Header Files\Vector3.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

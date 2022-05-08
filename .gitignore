@@ -42,3 +42,37 @@ x64/Debug/vc143.pdb
 .vs/Raytracing Render Engine/v17/.suo
 .vs/Raytracing Render Engine/v17/.suo
 .vs/Raytracing Render Engine/v17/Browse.VC.db
+.vs/Raytracing Render Engine/v17/ipch/AutoPCH/1c8b70d3cfd086c0/RAY.ipch
+.vs/Raytracing Render Engine/v17/ipch/AutoPCH/21319bd372731ad9/RAY.ipch
+.vs/Raytracing Render Engine/v17/ipch/AutoPCH/22c320402d1cbb9a/RENDERENGINE.ipch
+.vs/Raytracing Render Engine/v17/ipch/AutoPCH/2e4ea580fe7595e7/RENDERENGINE.ipch
+.vs/Raytracing Render Engine/v17/ipch/AutoPCH/37b3f39bf8a78a0e/COLOR.ipch
+.vs/Raytracing Render Engine/v17/ipch/AutoPCH/5a048f8b61577b41/LIGHT.ipch
+.vs/Raytracing Render Engine/v17/ipch/AutoPCH/73f8dac23a00c1b8/LIGHT.ipch
+.vs/Raytracing Render Engine/v17/ipch/AutoPCH/990ab69bf8a74f5/SCENE.ipch
+.vs/Raytracing Render Engine/v17/ipch/AutoPCH/d03f1858ac237519/VECTOR3.ipch
+.vs/Raytracing Render Engine/v17/ipch/AutoPCH/d5519c02773615f0/MATERIAL.ipch
+.vs/Raytracing Render Engine/v17/ipch/AutoPCH/e3e41bdee3493dc0/IMAGE.ipch
+.vs/Raytracing Render Engine/v17/ipch/AutoPCH/eecf378bac1bbeca/OBJECT.ipch
+.vs/Raytracing Render Engine/v17/.suo
+.vs/Raytracing Render Engine/v17/Browse.VC.db
+Raytracing Render Engine.vcxproj
+x64/Debug/Color.obj
+x64/Debug/Image.obj
+x64/Debug/Light.obj
+x64/Debug/Material.obj
+x64/Debug/Object.obj
+x64/Debug/Ray.obj
+x64/Debug/Raytracing Render Engine.Build.CppClean.log
+x64/Debug/RenderEngine.obj
+x64/Debug/Scene.obj
+x64/Debug/Vector3.obj
+.vs/Raytracing Render Engine/v17/ipch/AutoPCH/ffe97cef20b1a93e/VECTOR3.ipch
+.vs/Raytracing Render Engine/v17/ipch/AutoPCH/d6e6cf41922dbb0f/IMAGE.ipch
+.vs/Raytracing Render Engine/v17/ipch/AutoPCH/d238342d13ef6979/MATERIAL.ipch
+.vs/Raytracing Render Engine/v17/ipch/AutoPCH/bb28fd5352bbcc22/LIGHT.ipch
+.vs/Raytracing Render Engine/v17/ipch/AutoPCH/8e14e9c921aeffa/RAY.ipch
+.vs/Raytracing Render Engine/v17/ipch/AutoPCH/7ef69aea2abe31ee/RENDERENGINE.ipch
+.vs/Raytracing Render Engine/v17/ipch/AutoPCH/490c0dcb0c3fa451/COLOR.ipch
+.vs/Raytracing Render Engine/v17/ipch/AutoPCH/32099bfe8cd97bb7/OBJECT.ipch
+.vs/Raytracing Render Engine/v17/ipch/AutoPCH/2e5e56a041a5919e/SCENE.ipch
