@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <chrono>
 
 #include "Color.h"
 #include "Ray.h"
@@ -16,7 +17,7 @@ private:
 	Image pixels;
 
 public:
-	RenderEngine(Scene&);
+	RenderEngine(Scene&, int = 0);
 
 	Color rayTrace(Ray&, Scene&) const;
 

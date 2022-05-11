@@ -26,5 +26,7 @@ void main()
 
 	Scene scene(&camera, &lights, &objects, 320, 200, 8);
 
+	RenderEngine debugEngine(scene, 1);
+
 	RenderEngine engine(scene);
 }

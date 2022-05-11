@@ -1,6 +1,6 @@
 #include "../Header Files/RenderEngine.h"
 
-RenderEngine::RenderEngine(Scene& inputScene) : pixels(inputScene.getWidth(), inputScene.getHeight(), inputScene.getBitDepth())
+RenderEngine::RenderEngine(Scene& inputScene, int timerMode) : pixels(inputScene.getWidth(), inputScene.getHeight(), inputScene.getBitDepth())
 {
 	height = inputScene.getHeight();
 	width = inputScene.getWidth();
@@ -19,6 +19,8 @@ RenderEngine::RenderEngine(Scene& inputScene) : pixels(inputScene.getWidth(), in
 
 	float x, y;
 
+	auto start = std::chrono::high_resolution_clock::now();
+
 	for (int i = 0; i < height; i++)
 	{
 		y = y0 + i * yStep;
@@ -29,13 +31,32 @@ RenderEngine::RenderEngine(Scene& inputScene) : pixels(inputScene.getWidth(), in
 
 			Ray ray(*camera, (Vector3(x, y, 0) - *camera));
 
-			pixels.setPixel(j, i, rayTrace(ray, inputScene));
+			if (timerMode)
+			{
+				rayTrace(ray, inputScene);
+			}
+			else
+			{
+				pixels.setPixel(j, i, rayTrace(ray, inputScene));
+			}
 		}
 
-		displayProgress((y * aspectRatio + 1) / 2);
+		if (!timerMode)
+		{
+			displayProgress((y * aspectRatio + 1) / 2);
+		}
 	}
 
-	pixels.writeFile();
+	auto stop = std::chrono::high_resolution_clock::now();
+
+	if (!timerMode)
+	{
+		pixels.writeFile();
+	}
+	else
+	{
+		std::cout << "Time taken to render is: " << std::chrono::duration_cast<std::chrono::microseconds>(stop - start).count() << " microseconds\n\n";
+	}
 }
 
 Color RenderEngine::rayTrace(Ray & inputRay, Scene & inputScene) const
