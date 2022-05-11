@@ -7,30 +7,30 @@
 class Color
 {
 private:
-	int r, g, b;
+	float r, g, b;
 
 public:
 	Color(std::string);
 
-	Color(int = 0, int = 0, int = 0);
+	Color(float = 0, float = 0, float = 0);
 	
 	Color operator+(Color other) const;
 
 	Color operator*(float other) const;
 
-	void setAll(int = 0, int = 0, int = 0);
+	void setAll(float = 0, float = 0, float = 0);
 
-	void setR(int);
+	void setR(float);
 
-	void setG(int);
+	void setG(float);
 	
-	void setB(int);
+	void setB(float);
 
-	int getR() const;
+	float getR() const;
 
-	int getG() const;
+	float getG() const;
 
-	int getB() const;
+	float getB() const;
 
 	int hexCharToDecInt(char) const;
 };

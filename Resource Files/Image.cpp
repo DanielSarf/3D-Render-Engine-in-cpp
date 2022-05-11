@@ -49,7 +49,9 @@ void Image::writeFile() const
 	{
 		for (int w = 0; w < width; w++)
 		{
-			imageFile << (pixels[h][w].getR() > maxColorValue ? maxColorValue : pixels[h][w].getR()) << " " << (pixels[h][w].getG() > maxColorValue ? maxColorValue : pixels[h][w].getG()) << " " << (pixels[h][w].getB() > maxColorValue ? maxColorValue : pixels[h][w].getB()) << " ";
+			imageFile << (int(pixels[h][w].getR() * maxColorValue) > maxColorValue ? maxColorValue : int(pixels[h][w].getR() * maxColorValue)) 
+			   << " " << (int(pixels[h][w].getG() * maxColorValue) > maxColorValue ? maxColorValue : int(pixels[h][w].getG() * maxColorValue))
+			   << " " << (int(pixels[h][w].getB() * maxColorValue) > maxColorValue ? maxColorValue : int(pixels[h][w].getB() * maxColorValue)) << " ";
 		}
 
 		imageFile << std::endl;

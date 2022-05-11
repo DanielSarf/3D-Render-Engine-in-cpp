@@ -29,7 +29,7 @@ RenderEngine::RenderEngine(Scene& inputScene, int timerMode) : pixels(inputScene
 		{
 			x = x0 + j * xStep;
 
-			Ray ray(*camera, (Vector3(x, y, 0) - *camera));
+			Ray ray(*camera, (Vector3(x, y) - *camera));
 
 			if (timerMode)
 			{
@@ -55,7 +55,7 @@ RenderEngine::RenderEngine(Scene& inputScene, int timerMode) : pixels(inputScene
 	}
 	else
 	{
-		std::cout << "Time taken to render is: " << std::chrono::duration_cast<std::chrono::microseconds>(stop - start).count() << " microseconds\n\n";
+		std::cout << "Time taken to render is: " << float(std::chrono::duration_cast<std::chrono::microseconds>(stop - start).count()) / 1000000 << " microseconds\n\n";
 	}
 }
 
@@ -115,7 +115,7 @@ Color RenderEngine::colorAt(Object *&objectHit, Vector3 &hitPosition, Vector3 &h
 
 	float specularK = 50;
 
-	Color color = Color("#000000") + objectMaterial.getAmbient();
+	Color color = Color() + objectMaterial.getAmbient();
 
 	int numberOfLights = (*inputScene.getLights()).size();
 	
