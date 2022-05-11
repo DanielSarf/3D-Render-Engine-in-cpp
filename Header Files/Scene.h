@@ -12,16 +12,18 @@ private:
 	Vector3* camera;
 	std::vector<Light>* lights;
 	std::vector<Object>* objects;
-	int height, width;
+	int height, width, bitDepth;
 
 public:
-	Scene(Vector3*, std::vector<Light>*, std::vector<Object>*, int, int);
+	Scene(Vector3*, std::vector<Light>*, std::vector<Object>*, int, int, int);
 
 	void setCamera(Vector3*);
 
 	void setHeight(int);
 
 	void setWidth(int);
+
+	void setBitDepth(int);
 
 	Vector3* getCamera() const;
 
@@ -32,4 +34,6 @@ public:
 	int getHeight() const;
 
 	int getWidth() const;
+
+	int getBitDepth() const;
 };

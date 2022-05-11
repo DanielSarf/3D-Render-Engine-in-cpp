@@ -20,5 +20,5 @@ public:
 
 	void findNearest(Object*&, float&, Ray&, Scene&) const;
 
-	Color colorAt(Object*&, Vector3&, Scene&) const;
+	Color colorAt(Object*&, Vector3&, Vector3&, Scene&) const;
 };

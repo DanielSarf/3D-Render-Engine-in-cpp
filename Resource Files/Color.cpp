@@ -7,7 +7,7 @@ Color::Color(std::string hexCode)
 	b = 16 * hexCharToDecInt(hexCode[5]) + hexCharToDecInt(hexCode[6]);
 }
 
-Color::Color(unsigned char inputR, unsigned char inputG, unsigned char inputB) : r(inputR), g(inputG), b(inputB) {}
+Color::Color(int inputR, int inputG, int inputB) : r(inputR), g(inputG), b(inputB) {}
 
 Color Color::operator+(Color other) const
 {
@@ -19,39 +19,39 @@ Color Color::operator*(float other) const
 	return Color(r * other, g * other, b * other);
 }
 
-void Color::setAll(unsigned char inputR, unsigned char inputG, unsigned char inputB)
+void Color::setAll(int inputR, int inputG, int inputB)
 {
 	r = inputR;
 	g = inputG;
 	b = inputB;
 }
 
-void Color::setR(unsigned char inputR)
+void Color::setR(int inputR)
 {
 	r = inputR;
 }
 
-void Color::setG(unsigned char inputG)
+void Color::setG(int inputG)
 {
 	g = inputG;
 }
 
-void Color::setB(unsigned char inputB)
+void Color::setB(int inputB)
 {
 	b = inputB;
 }
 
-short Color::getR() const
+int Color::getR() const
 {
 	return r;
 }
 
-short Color::getG() const
+int Color::getG() const
 {
 	return g;
 }
 
-short Color::getB() const
+int Color::getB() const
 {
 	return b;
 }

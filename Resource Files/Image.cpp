@@ -2,7 +2,7 @@
 
 #include "../Header Files/Image.h"
 
-Image::Image(int inputWidth, int inputHeight) : width(inputWidth), height(inputHeight)
+Image::Image(int inputWidth, int inputHeight, int inputBitDepth) : width(inputWidth), height(inputHeight), bitDepth(inputBitDepth)
 {
 	pixels = new Color * [inputHeight];
 
@@ -41,13 +41,15 @@ void Image::writeFile() const
 
 	imageFile.open(nameOfFile);
 
-	imageFile << "P3 " << width << " " << height << std::endl << "255" << std::endl;
+	int maxColorValue = (pow(2, bitDepth) - 1);
+
+	imageFile << "P3 " << width << " " << height << std::endl << maxColorValue << std::endl;
 
 	for (int h = 0; h < height; h++)
 	{
 		for (int w = 0; w < width; w++)
 		{
-			imageFile << pixels[h][w].getR() << " " << pixels[h][w].getG() << " " << pixels[h][w].getB() << " ";
+			imageFile << (pixels[h][w].getR() > maxColorValue ? maxColorValue : pixels[h][w].getR()) << " " << (pixels[h][w].getG() > maxColorValue ? maxColorValue : pixels[h][w].getG()) << " " << (pixels[h][w].getB() > maxColorValue ? maxColorValue : pixels[h][w].getB()) << " ";
 		}
 
 		imageFile << std::endl;

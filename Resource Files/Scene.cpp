@@ -1,6 +1,6 @@
 #include "../Header Files/Scene.h"
 
-Scene::Scene(Vector3* inputCamera, std::vector<Light>* inputLights, std::vector<Object>* inputObjects, int inputWidth, int inputHeight) : camera(inputCamera), lights(inputLights), objects(inputObjects), width(inputWidth), height(inputHeight) {}
+Scene::Scene(Vector3* inputCamera, std::vector<Light>* inputLights, std::vector<Object>* inputObjects, int inputWidth, int inputHeight, int inputBitDepth) : camera(inputCamera), lights(inputLights), objects(inputObjects), width(inputWidth), height(inputHeight), bitDepth(inputBitDepth) {}
 
 void Scene::setCamera(Vector3* inputCamera)
 {
@@ -15,6 +15,11 @@ void Scene::setHeight(int inputHeight)
 void Scene::setWidth(int inputWidth)
 {
 	width = inputWidth;
+}
+
+void Scene::setBitDepth(int inputBitDepth)
+{
+	bitDepth = inputBitDepth;
 }
 
 Vector3* Scene::getCamera() const
@@ -40,4 +45,9 @@ int Scene::getHeight() const
 int Scene::getWidth() const
 {
 	return width;
+}
+
+int Scene::getBitDepth() const
+{
+	return bitDepth;
 }

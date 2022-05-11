@@ -1,6 +1,6 @@
 #include "../Header Files/RenderEngine.h"
 
-RenderEngine::RenderEngine(Scene& inputScene) : pixels(inputScene.getWidth(), inputScene.getHeight())
+RenderEngine::RenderEngine(Scene& inputScene) : pixels(inputScene.getWidth(), inputScene.getHeight(), inputScene.getBitDepth())
 {
 	height = inputScene.getHeight();
 	width = inputScene.getWidth();
@@ -52,16 +52,20 @@ Color RenderEngine::rayTrace(Ray & inputRay, Scene & inputScene) const
 
 	Vector3 hitPosition = inputRay.getOrigin() + inputRay.getDirection() * hitDistance;
 
-	color = color + colorAt(objectHit, hitPosition, inputScene);
+	Vector3 hitNormal = (*objectHit).normal(hitPosition);
+
+	color = color + colorAt(objectHit, hitPosition, hitNormal, inputScene);
 
 	return color;
 }
 
-void RenderEngine::findNearest(Object * &objectHit, float& hitDistance, Ray & inputRay, Scene & inputScene) const
+void RenderEngine::findNearest(Object * &objectHit, float &hitDistance, Ray &inputRay, Scene &inputScene) const
 {
 	float minimumDistance = NULL;
 
-	for (int i = 0; i < (*inputScene.getObjects()).size(); i++)
+	int numberOfObjects = (*inputScene.getObjects()).size();
+
+	for (int i = 0; i < numberOfObjects; i++)
 	{
 		float distance = NULL;
 
@@ -78,7 +82,34 @@ void RenderEngine::findNearest(Object * &objectHit, float& hitDistance, Ray & in
 	hitDistance = minimumDistance;
 }
 
-Color RenderEngine::colorAt(Object * &objecHit, Vector3 & hitPosition, Scene & inputScene) const
+Color RenderEngine::colorAt(Object *&objectHit, Vector3 &hitPosition, Vector3 &hitNormal, Scene &inputScene) const
 {
-	return (*objecHit).getMaterial();
+	Material objectMaterial = (*objectHit).getMaterial();
+
+	Color objectColor = objectMaterial.colorAtMaterial();
+
+	Vector3 toCam = *(inputScene.getCamera()) - hitPosition;
+
+	float specularK = 50;
+
+	Color color = Color("#000000") + objectMaterial.getAmbient();
+
+	int numberOfLights = (*inputScene.getLights()).size();
+	
+	for (int i = 0; i < numberOfLights; i++)
+	{
+		Ray toLight(hitPosition, (*inputScene.getLights())[i].getLocation() - hitPosition);
+
+		float hitNormalDotToLightDirection = hitNormal.dotProduct(toLight.getDirection());
+
+		color = color + objectColor * objectMaterial.getDiffuse() * (hitNormalDotToLightDirection > 0 ? hitNormalDotToLightDirection : 0);
+
+		Vector3 halfVector = (toLight.getDirection() + toCam).normalize();
+
+		float hitNormalDotHalfVector = hitNormal.dotProduct(halfVector);
+
+		color = color + (*inputScene.getLights())[i].getColor() * objectMaterial.getSpecular() * pow((hitNormalDotHalfVector > 0 ? hitNormalDotHalfVector : 0), specularK);
+	}
+
+	return color;
 }

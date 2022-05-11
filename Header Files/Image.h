@@ -5,11 +5,11 @@
 class Image
 {
 private:
-	int height, width;
+	int height, width, bitDepth;
 	Color** pixels;
 
 public:
-	Image(int, int);
+	Image(int, int, int);
 
 	void setPixel(int, int, Color) const;
 

@@ -1,6 +1,6 @@
 #include "../Header Files/Object.h"
 
-Object::Object(Vector3 inputLocation, float inputRadius, Color inputMaterial) : location(inputLocation), radius(inputRadius), material(inputMaterial) {}
+Object::Object(Vector3 inputLocation, float inputRadius, Material inputMaterial) : location(inputLocation), radius(inputRadius), material(inputMaterial) {}
 
 float Object::intersections(Ray& ray) const
 {
@@ -25,7 +25,12 @@ float Object::intersections(Ray& ray) const
 	return NULL;
 }
 
-Color Object::getMaterial() const
+Vector3 Object::normal(Vector3 surfacePoint)
+{
+	return (surfacePoint - location).normalize();
+}
+
+Material Object::getMaterial() const
 {
 	return material;
 }

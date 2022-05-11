@@ -18,11 +18,13 @@ void main()
 
 	lights.push_back(Light(Vector3(1.5, -0.5, -10), Color("#FFFFFF"), 100));
 
+	Material redDiffuseShiny(Color("#FF0000"), Color("#000000"));
+
 	vector<Object> objects;
 
-	objects.push_back(Object(Vector3(0, 0, 0), 0.5, Color("#FF0000")));
+	objects.push_back(Object(Vector3(0, 0, 0), 0.5, redDiffuseShiny));
 
-	Scene scene(&camera, &lights, &objects, 320, 200);
+	Scene scene(&camera, &lights, &objects, 320, 200, 8);
 
 	RenderEngine engine(scene);
 }
