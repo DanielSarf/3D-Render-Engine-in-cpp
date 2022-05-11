@@ -31,6 +31,8 @@ RenderEngine::RenderEngine(Scene& inputScene) : pixels(inputScene.getWidth(), in
 
 			pixels.setPixel(j, i, rayTrace(ray, inputScene));
 		}
+
+		displayProgress((y * aspectRatio + 1) / 2);
 	}
 
 	pixels.writeFile();
@@ -112,4 +114,23 @@ Color RenderEngine::colorAt(Object *&objectHit, Vector3 &hitPosition, Vector3 &h
 	}
 
 	return color;
+}
+
+void RenderEngine::displayProgress(float normalizedProgress) const
+{
+	int barWidth = 70;
+
+	std::cout << "[";
+
+	int pos = barWidth * normalizedProgress;
+
+	for (int i = 0; i < barWidth; ++i) {
+		if (i < pos) std::cout << "=";
+		else if (i == pos) std::cout << ">";
+		else std::cout << " ";
+	}
+
+	std::cout << "] " << int(normalizedProgress * 100) << " %\r";
+
+	std::cout.flush();
 }

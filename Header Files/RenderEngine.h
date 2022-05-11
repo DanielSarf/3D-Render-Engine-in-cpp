@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iostream>
+
 #include "Color.h"
 #include "Ray.h"
 #include "Image.h"
@@ -21,4 +23,6 @@ public:
 	void findNearest(Object*&, float&, Ray&, Scene&) const;
 
 	Color colorAt(Object*&, Vector3&, Vector3&, Scene&) const;
+
+	void displayProgress(float) const;
 };
