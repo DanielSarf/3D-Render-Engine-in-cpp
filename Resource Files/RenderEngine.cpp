@@ -82,9 +82,9 @@ void RenderEngine::findNearest(Object * &objectHit, float &hitDistance, Ray &inp
 {
 	float minimumDistance = NULL;
 
-	int numberOfObjects = (*inputScene.getObjects()).size();
+	size_t numberOfObjects = (*inputScene.getObjects()).size();
 
-	for (int i = 0; i < numberOfObjects; i++)
+	for (size_t i = 0; i < numberOfObjects; i++)
 	{
 		float distance = NULL;
 
@@ -113,9 +113,9 @@ Color RenderEngine::colorAt(Object *&objectHit, Vector3 &hitPosition, Vector3 &h
 
 	Color color = Color() + objectMaterial.getAmbient();
 
-	int numberOfLights = (*inputScene.getLights()).size();
+	size_t numberOfLights = (*inputScene.getLights()).size();
 	
-	for (int i = 0; i < numberOfLights; i++)
+	for (size_t i = 0; i < numberOfLights; i++)
 	{
 		Ray toLight(hitPosition, (*inputScene.getLights())[i].getLocation() - hitPosition);
 
@@ -139,7 +139,7 @@ void RenderEngine::displayProgress(float normalizedProgress) const
 
 	std::cout << "[";
 
-	int pos = barWidth * normalizedProgress;
+	int pos = int(barWidth * normalizedProgress);
 
 	for (int i = 0; i < barWidth; ++i) {
 		if (i < pos) std::cout << "=";
