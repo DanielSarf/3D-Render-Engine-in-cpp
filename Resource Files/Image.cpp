@@ -57,7 +57,7 @@ void Image::outputPPM(std::string &nameOfFile, int inputBitDepth) const
 
 	imageFile.open(nameOfFile);
 
-	int maxColorValue = int(pow(2, inputBitDepth) - 1);
+	unsigned int maxColorValue = unsigned int(pow(2, inputBitDepth) - 1);
 
 	imageFile << "P3 " << width << " " << height << std::endl << maxColorValue << std::endl;
 
