@@ -1,5 +1,3 @@
-#pragma warning(disable: 4996)
-
 #include "../Header Files/Image.h"
 
 Image::Image(int inputWidth, int inputHeight) : width(inputWidth), height(inputHeight)
