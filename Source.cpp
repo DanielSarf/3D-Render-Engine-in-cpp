@@ -12,7 +12,7 @@
 
 using namespace std;
 
-void main()
+int main()
 {
 	Vector3 camera(0, 0, -1);
 
@@ -26,11 +26,13 @@ void main()
 
 	objects.push_back(Object(Vector3(0, 0, 0), 0.5, redDiffuseShiny));
 
-	Scene scene(&camera, &lights, &objects, 320, 200, 8);
+	Scene scene(&camera, &lights, &objects, 320, 200);
 
 	RenderEngine debugEngine(scene, 1);
 
 	RenderEngine engine(scene);
 
 	engine.outputImage(fileTypes::PPM, 8);
+
+	return 0;
 }
