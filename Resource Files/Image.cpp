@@ -33,13 +33,13 @@ void Image::writeFile(fileTypes inputFileType, int inputBitDepth) const
 std::string Image::generateFileName(fileTypes inputFileType) const
 {
 	time_t curr_time;
-	tm* curr_tm;
+	tm curr_tm;
 	char date[50];
 
 	time(&curr_time);
-	curr_tm = localtime(&curr_time);
+	localtime_s(&curr_tm, &curr_time);
 
-	strftime(date, 50, "%d%m%Y%H%M%S", curr_tm);
+	strftime(date, 50, "%d%m%Y%H%M%S", &curr_tm);
 
 	std::string nameOfFile = date;
 
