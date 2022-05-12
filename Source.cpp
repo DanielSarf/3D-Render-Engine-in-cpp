@@ -8,6 +8,8 @@
 #include "Header Files/Scene.h"
 #include "Header Files/RenderEngine.h"
 
+#include "Header Files/fileTypes.h"
+
 using namespace std;
 
 void main()
@@ -29,4 +31,6 @@ void main()
 	RenderEngine debugEngine(scene, 1);
 
 	RenderEngine engine(scene);
+
+	engine.outputImage(fileTypes::PPM, 8);
 }

@@ -2,7 +2,7 @@
 
 #include "../Header Files/Image.h"
 
-Image::Image(int inputWidth, int inputHeight, int inputBitDepth) : width(inputWidth), height(inputHeight), bitDepth(inputBitDepth)
+Image::Image(int inputWidth, int inputHeight) : width(inputWidth), height(inputHeight)
 {
 	pixels = new Color * [inputHeight];
 
@@ -22,7 +22,17 @@ void Image::setPixel(int w, int h, Color color) const
 	pixels[h][w] = color;
 }
 
-void Image::writeFile() const
+void Image::writeFile(fileTypes inputFileType, int inputBitDepth) const
+{
+	std::string nameOfFile = generateFileName(inputFileType);
+
+	if (inputFileType == fileTypes::PPM)
+	{
+		outputPPM(nameOfFile, inputBitDepth);
+	}
+}
+
+std::string Image::generateFileName(fileTypes inputFileType) const
 {
 	time_t curr_time;
 	tm* curr_tm;
@@ -35,13 +45,21 @@ void Image::writeFile() const
 
 	std::string nameOfFile = date;
 
-	nameOfFile.append(".ppm");
+	if (inputFileType == fileTypes::PPM)
+	{
+		nameOfFile.append(".ppm");
+	}
 
+	return nameOfFile;
+}
+
+void Image::outputPPM(std::string &nameOfFile, int inputBitDepth) const
+{
 	std::ofstream imageFile;
 
 	imageFile.open(nameOfFile);
 
-	int maxColorValue = (pow(2, bitDepth) - 1);
+	int maxColorValue = (pow(2, inputBitDepth) - 1);
 
 	imageFile << "P3 " << width << " " << height << std::endl << maxColorValue << std::endl;
 
@@ -49,9 +67,9 @@ void Image::writeFile() const
 	{
 		for (int w = 0; w < width; w++)
 		{
-			imageFile << (int(pixels[h][w].getR() * maxColorValue) > maxColorValue ? maxColorValue : int(pixels[h][w].getR() * maxColorValue)) 
-			   << " " << (int(pixels[h][w].getG() * maxColorValue) > maxColorValue ? maxColorValue : int(pixels[h][w].getG() * maxColorValue))
-			   << " " << (int(pixels[h][w].getB() * maxColorValue) > maxColorValue ? maxColorValue : int(pixels[h][w].getB() * maxColorValue)) << " ";
+			 imageFile << (int(pixels[h][w].getR() * maxColorValue) > maxColorValue ? maxColorValue : int(pixels[h][w].getR() * maxColorValue))
+				<< " " << (int(pixels[h][w].getG() * maxColorValue) > maxColorValue ? maxColorValue : int(pixels[h][w].getG() * maxColorValue))
+				<< " " << (int(pixels[h][w].getB() * maxColorValue) > maxColorValue ? maxColorValue : int(pixels[h][w].getB() * maxColorValue)) << " ";
 		}
 
 		imageFile << std::endl;

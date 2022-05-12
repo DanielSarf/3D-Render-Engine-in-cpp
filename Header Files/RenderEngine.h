@@ -8,6 +8,9 @@
 #include "Image.h"
 #include "Scene.h"
 
+#include "fileTypes.h"
+
+
 class RenderEngine
 {
 private:
@@ -26,4 +29,6 @@ public:
 	Color colorAt(Object*&, Vector3&, Vector3&, Scene&) const;
 
 	void displayProgress(float) const;
+
+	void outputImage(fileTypes, int);
 };

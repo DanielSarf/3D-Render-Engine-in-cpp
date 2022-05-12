@@ -1,6 +1,6 @@
 #include "../Header Files/RenderEngine.h"
 
-RenderEngine::RenderEngine(Scene& inputScene, int timerMode) : pixels(inputScene.getWidth(), inputScene.getHeight(), inputScene.getBitDepth())
+RenderEngine::RenderEngine(Scene& inputScene, int timerMode) : pixels(inputScene.getWidth(), inputScene.getHeight())
 {
 	height = inputScene.getHeight();
 	width = inputScene.getWidth();
@@ -49,11 +49,7 @@ RenderEngine::RenderEngine(Scene& inputScene, int timerMode) : pixels(inputScene
 
 	auto stop = std::chrono::high_resolution_clock::now();
 
-	if (!timerMode)
-	{
-		pixels.writeFile();
-	}
-	else
+	if (timerMode)
 	{
 		std::cout << "Time taken to render is: " << float(std::chrono::duration_cast<std::chrono::microseconds>(stop - start).count()) / 1000000 << " seconds\n\n";
 	}
@@ -154,4 +150,9 @@ void RenderEngine::displayProgress(float normalizedProgress) const
 	std::cout << "] " << int(normalizedProgress * 100) << " %\r";
 
 	std::cout.flush();
+}
+
+void RenderEngine::outputImage(fileTypes inputFileType, int inputBitDepth)
+{
+	pixels.writeFile(inputFileType, inputBitDepth);
 }
