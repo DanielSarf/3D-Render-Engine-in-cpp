@@ -55,11 +55,11 @@ RenderEngine::RenderEngine(Scene& inputScene, int timerMode) : pixels(inputScene
 	}
 	else
 	{
-		std::cout << "Time taken to render is: " << float(std::chrono::duration_cast<std::chrono::microseconds>(stop - start).count()) / 1000000 << " microseconds\n\n";
+		std::cout << "Time taken to render is: " << float(std::chrono::duration_cast<std::chrono::microseconds>(stop - start).count()) / 1000000 << " seconds\n\n";
 	}
 }
 
-Color RenderEngine::rayTrace(Ray & inputRay, Scene & inputScene) const
+Color RenderEngine::rayTrace(Ray &inputRay, Scene &inputScene) const
 {
 	Color color;
 
