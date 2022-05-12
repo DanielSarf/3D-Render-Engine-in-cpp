@@ -67,9 +67,9 @@ void Image::outputPPM(std::string &nameOfFile, int inputBitDepth) const
 	{
 		for (int w = 0; w < width; w++)
 		{
-			 imageFile << (int(pixels[h][w].getR() * maxColorValue) > maxColorValue ? maxColorValue : int(pixels[h][w].getR() * maxColorValue))
-				<< " " << (int(pixels[h][w].getG() * maxColorValue) > maxColorValue ? maxColorValue : int(pixels[h][w].getG() * maxColorValue))
-				<< " " << (int(pixels[h][w].getB() * maxColorValue) > maxColorValue ? maxColorValue : int(pixels[h][w].getB() * maxColorValue)) << " ";
+			 imageFile << (unsigned int(pixels[h][w].getR() * maxColorValue) > maxColorValue ? maxColorValue : unsigned int(pixels[h][w].getR() * maxColorValue))
+				<< " " << (unsigned int(pixels[h][w].getG() * maxColorValue) > maxColorValue ? maxColorValue : unsigned int(pixels[h][w].getG() * maxColorValue))
+				<< " " << (unsigned int(pixels[h][w].getB() * maxColorValue) > maxColorValue ? maxColorValue : unsigned int(pixels[h][w].getB() * maxColorValue)) << " ";
 		}
 
 		imageFile << std::endl;
