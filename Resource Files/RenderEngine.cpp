@@ -1,6 +1,6 @@
 #include "../Header Files/RenderEngine.h"
 
-RenderEngine::RenderEngine(Scene& inputScene, int timerMode) : pixels(inputScene.getWidth(), inputScene.getHeight())
+RenderEngine::RenderEngine(Scene &inputScene, int timerMode) : pixels(inputScene.getWidth(), inputScene.getHeight())
 {
 	height = inputScene.getHeight();
 	width = inputScene.getWidth();
