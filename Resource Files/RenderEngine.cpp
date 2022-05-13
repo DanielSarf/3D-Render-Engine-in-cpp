@@ -29,7 +29,7 @@ RenderEngine::RenderEngine(Scene &inputScene, int timerMode) : pixels(inputScene
 		{
 			x = x0 + j * xStep;
 
-			Ray ray(*camera, (Vector3(x, y) - *camera));
+			Ray ray(*camera, (Vector3(x, -y) - *camera));
 
 			if (timerMode)
 			{
