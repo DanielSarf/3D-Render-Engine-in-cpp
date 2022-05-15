@@ -13,7 +13,7 @@ private:
 	Material material;
 
 public:
-	Object(Vector3, float inputRadius, Material);
+	Object(Vector3 = Vector3(), float = 1, Material = Material());
 
 	float intersections(Ray&) const;
 

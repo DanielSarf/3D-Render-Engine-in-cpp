@@ -21,7 +21,7 @@ int main()
 
 	vector<Light> lights;
 
-	lights.push_back(Light(Vector3(1.5, -0.5, 10)));
+	lights.push_back(Light());
 
 	Material redDiffuseShiny(Color("#FF0000"));
 

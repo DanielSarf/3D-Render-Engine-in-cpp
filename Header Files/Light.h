@@ -13,7 +13,7 @@ private:
 	//int maxBounces;
 
 public:
-	Light(Vector3, Color = Color(1, 1, 1), float = 1);
+	Light(Vector3 = Vector3(), Color = Color(1, 1, 1), float = 1);
 
 	void setLocation(Vector3);
 

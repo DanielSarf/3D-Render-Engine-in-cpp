@@ -12,7 +12,7 @@ private:
 	float specular;
 
 public:
-	Material(Color, Color = Color(), float = 1, float = 1);
+	Material(Color = Color(1, 1, 1), Color = Color(), float = 1, float = 1);
 
 	void setColor(Color);
 
