@@ -14,11 +14,14 @@ using namespace std;
 
 int main()
 {
+	int WIDTH = 1920;
+	int HEIGHT = 1080;
+
 	Vector3 camera(0, 0, 1);
 
 	vector<Light> lights;
 
-	lights.push_back(Light(Vector3(1.5, -0.5, 10), Color("#FFFFFF"), 100));
+	lights.push_back(Light(Vector3(1.5, -0.5, 10)));
 
 	Material redDiffuseShiny(Color("#FF0000"));
 
@@ -26,7 +29,7 @@ int main()
 
 	objects.push_back(Object(Vector3(0, 0, 0), 0.5, redDiffuseShiny));
 
-	Scene scene(&camera, &lights, &objects, 1920, 1080);
+	Scene scene(&camera, &lights, &objects, WIDTH, HEIGHT);
 
 	RenderEngine debugEngine(scene, 1);
 
