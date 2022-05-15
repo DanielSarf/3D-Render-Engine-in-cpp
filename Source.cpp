@@ -17,11 +17,13 @@ int main()
 	int WIDTH = 1920;
 	int HEIGHT = 1080;
 
-	Vector3 camera(0, 0, 1);
+	Vector3 camera(0, 0.35, 1);
 
 	vector<Light> lights;
 
 	lights.push_back(Light(Vector3(1.5, 0.5, 10)));
+
+	lights.push_back(Light(Vector3(-0.5, 10.5, 0), Color("#E6E6E6")));
 
 	Material redDiffuseShiny(Color("#FF0000"));
 
