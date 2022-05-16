@@ -14,8 +14,8 @@ using namespace std;
 
 int main()
 {
-	int WIDTH = 1920;
-	int HEIGHT = 1080;
+	int WIDTH = 320;
+	int HEIGHT = 200;
 
 	Vector3 camera(0, 0.35, 1);
 
@@ -25,11 +25,19 @@ int main()
 
 	lights.push_back(Light(Vector3(-0.5, 10.5, 0), Color("#E6E6E6")));
 
-	Material redDiffuseShiny(Color("#FF0000"));
+	Material chequeredMaterial(Color("#FF0000"));
+
+	Material blueDiffuseShiny(Color("#0000FF"));
+
+	Material pinkDiffuseShiny(Color("#803980"));
 
 	vector<Object> objects;
 
-	objects.push_back(Object(Vector3(0, 0, 0), 0.5, redDiffuseShiny));
+	objects.push_back(Object(Vector3(0, -10000.5, -1), 10000, chequeredMaterial));
+
+	objects.push_back(Object(Vector3(0.75, 0.1, -1), 0.6, blueDiffuseShiny));
+
+	objects.push_back(Object(Vector3(-0.75, 0.1, -2.25), 0.6, pinkDiffuseShiny));
 
 	Scene scene(&camera, &lights, &objects, WIDTH, HEIGHT);
 
