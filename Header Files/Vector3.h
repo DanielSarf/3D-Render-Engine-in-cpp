@@ -4,7 +4,7 @@
 
 class Vector3
 {
-private:
+protected:
 	float x, y, z;
 
 public:
