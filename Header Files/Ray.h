@@ -17,4 +17,6 @@ public:
 	Vector3 getOrigin() const;
 
 	Vector3 getDirection() const;
+
+	Vector3 hitPosition(float) const;
 };

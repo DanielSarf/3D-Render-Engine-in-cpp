@@ -1,9 +1,11 @@
 #include "../Header Files/RenderEngine.h"
 
-RenderEngine::RenderEngine(Scene &inputScene, int timerMode) : pixels(inputScene.getWidth(), inputScene.getHeight())
+RenderEngine::RenderEngine(Scene &inputScene, bool timerMode) : pixels(inputScene.getCamera()->getWidth(), inputScene.getCamera()->getHeight())
 {
-	height = inputScene.getHeight();
-	width = inputScene.getWidth();
+	camera = inputScene.getCamera();
+
+	height = camera->getHeight();
+	width = camera->getWidth();
 
 	aspectRatio = float(width) / height;
 
@@ -15,11 +17,30 @@ RenderEngine::RenderEngine(Scene &inputScene, int timerMode) : pixels(inputScene
 	y1 = 1 / aspectRatio;
 	yStep = (y1 - y0) / (height - 1);
 
-	camera = inputScene.getCamera();
+	startFrame = camera->getStartFrame();
 
+	endFrame = camera->getEndFrame();
+
+	for (int currentFrame = startFrame; currentFrame <= endFrame; currentFrame++)
+	{
+		//keyframe(currentFrame);
+
+		auto start = std::chrono::high_resolution_clock::now();
+
+		render(inputScene, timerMode);
+
+		auto stop = std::chrono::high_resolution_clock::now();
+
+		if (timerMode)
+		{
+			std::cout << "Time taken to render is: " << float(std::chrono::duration_cast<std::chrono::microseconds>(stop - start).count()) / 1000000 << " seconds\n\n";
+		}
+	}
+}
+
+void RenderEngine::render(Scene& inputScene, bool timerMode) const
+{
 	float x, y;
-
-	auto start = std::chrono::high_resolution_clock::now();
 
 	for (int i = 0; i < height; i++)
 	{
@@ -29,29 +50,22 @@ RenderEngine::RenderEngine(Scene &inputScene, int timerMode) : pixels(inputScene
 		{
 			x = x0 + j * xStep;
 
-			Ray ray(*camera, (Vector3(x, -y) - *camera));
+			Color rayTracedColor(0, 0, 0);
 
-			if (timerMode)
+			for (int currentSample = 0; currentSample < camera->getNumberOfSamples(); currentSample++)
 			{
-				rayTrace(ray, inputScene);
+				Ray ray(camera->getLocation(), (Vector3(x + randomFloat() / width, -y + randomFloat() / height, -camera->getFocalLength()) - camera->getLocation()));
+				
+				rayTracedColor = rayTracedColor + rayTrace(ray, inputScene);
 			}
-			else
-			{
-				pixels.setPixel(j, i, rayTrace(ray, inputScene));
-			}
+
+			pixels.setPixel(j, i, rayTracedColor / camera->getNumberOfSamples());
 		}
 
 		if (!timerMode)
 		{
 			displayProgress((y * aspectRatio + 1) / 2);
 		}
-	}
-
-	auto stop = std::chrono::high_resolution_clock::now();
-
-	if (timerMode)
-	{
-		std::cout << "Time taken to render is: " << float(std::chrono::duration_cast<std::chrono::microseconds>(stop - start).count()) / 1000000 << " seconds\n\n";
 	}
 }
 
@@ -69,7 +83,7 @@ Color RenderEngine::rayTrace(Ray &inputRay, Scene &inputScene) const
 		return color;
 	}
 
-	Vector3 hitPosition = inputRay.getOrigin() + inputRay.getDirection() * hitDistance;
+	Vector3 hitPosition = inputRay.hitPosition(hitDistance);
 
 	Vector3 hitNormal = (*objectHit).normal(hitPosition);
 
@@ -103,11 +117,11 @@ void RenderEngine::findNearest(Object * &objectHit, float &hitDistance, Ray &inp
 
 Color RenderEngine::colorAt(Object *&objectHit, Vector3 &hitPosition, Vector3 &hitNormal, Scene &inputScene) const
 {
-	Material objectMaterial = (*objectHit).getMaterial();
+	/*Material objectMaterial = (*objectHit).getMaterial();
 
 	Color objectColor = objectMaterial.colorAtMaterial();
 
-	Vector3 toCam = *(inputScene.getCamera()) - hitPosition;
+	Vector3 toCam = inputScene.getCamera()->getLocation() - hitPosition;
 
 	float specularK = 50;
 
@@ -130,7 +144,31 @@ Color RenderEngine::colorAt(Object *&objectHit, Vector3 &hitPosition, Vector3 &h
 		color = color + (*inputScene.getLights())[i].getColor() * objectMaterial.getSpecular() * pow((hitNormalDotHalfVector > 0 ? hitNormalDotHalfVector : 0), specularK);
 	}
 
-	return color;
+	return color;*/
+}
+
+void RenderEngine::refreshSettings(Scene &inputScene)
+{
+	pixels.~Image();
+
+	pixels = Image(inputScene.getCamera()->getWidth(), inputScene.getCamera()->getHeight());
+
+	height = camera->getHeight();
+	width = camera->getWidth();
+
+	aspectRatio = float(width) / height;
+
+	x0 = -1;
+	x1 = 1;
+	xStep = (x1 - x0) / (width - 1);
+
+	y0 = -1 / aspectRatio;
+	y1 = 1 / aspectRatio;
+	yStep = (y1 - y0) / (height - 1);
+
+	startFrame = camera->getStartFrame();
+
+	endFrame = camera->getEndFrame();
 }
 
 void RenderEngine::displayProgress(float normalizedProgress) const

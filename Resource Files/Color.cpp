@@ -19,6 +19,12 @@ Color Color::operator*(float other) const
 	return Color(x * other, y * other, z * other);
 }
 
+Color Color::operator/(float other) const
+{
+	return Color(x / other, y / other, z / other);
+}
+
+
 int Color::hexCharToDecInt(char inputChar) const
 {
 	std::string tempString = "";

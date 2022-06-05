@@ -16,6 +16,8 @@ public:
 	Color operator+(Color other) const;
 
 	Color operator*(float other) const;
+	
+	Color operator/(float other) const;
 
 	int hexCharToDecInt(char) const;
 };

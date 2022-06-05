@@ -14,13 +14,15 @@
 class RenderEngine
 {
 private:
-	int height, width;
+	int height, width, startFrame, endFrame;
 	float aspectRatio, x0, x1, xStep, y0, y1, yStep;
-	Vector3* camera;
+	Camera* camera;
 	Image pixels;
 
 public:
-	RenderEngine(Scene&, int = 0);
+	RenderEngine(Scene&, bool = false);
+
+	void render(Scene&, bool) const;
 
 	Color rayTrace(Ray&, Scene&) const;
 
@@ -29,6 +31,8 @@ public:
 	Color colorAt(Object*&, Vector3&, Vector3&, Scene&) const;
 
 	void displayProgress(float) const;
+
+	void refreshSettings(Scene&);
 
 	void outputImage(fileTypes, int);
 };

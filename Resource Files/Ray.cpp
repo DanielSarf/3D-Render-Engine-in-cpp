@@ -21,3 +21,8 @@ Vector3 Ray::getDirection() const
 {
 	return direction;
 }
+
+Vector3 Ray::hitPosition(float hitDistance) const
+{
+	return origin + direction * hitDistance;
+}

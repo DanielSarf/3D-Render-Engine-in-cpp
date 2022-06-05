@@ -7,6 +7,11 @@ Vector3 Vector3::operator+(Vector3 other) const
 	return Vector3(x + other.x, y + other.y, z + other.z);
 }
 
+Vector3 Vector3::operator-() const
+{
+	return Vector3(-x , -y, -z);
+}
+
 Vector3 Vector3::operator-(Vector3 other) const
 {
 	return Vector3(x - other.x, y - other.y, z - other.z);
@@ -77,6 +82,38 @@ float Vector3::magnitude() const
 Vector3 Vector3::normalize() const
 {
 	return (*this) / magnitude();
+}
+
+Vector3 Vector3::crossProduct(Vector3 other) const
+{
+	return Vector3(y * other.z - z * other.y,
+		z * other.x - x * other.z,
+		x * other.y - y * other.x);
+}
+
+Vector3 Vector3::random() const
+{
+	return Vector3(randomFloat(), randomFloat(), randomFloat());
+}
+
+Vector3 Vector3::random(float min, float max) const
+{
+	return Vector3(randomFloat(min, max), randomFloat(min, max), randomFloat(min, max));
+}
+
+Vector3 Vector3::randomInUnitSphere() const
+{
+	while (true)
+	{
+		Vector3 point = random(-1, 1);
+		
+		if (point.dotProduct() >= 1)
+		{
+			continue;
+		}
+
+		return point;
+	}
 }
 
 void Vector3::printVector() const

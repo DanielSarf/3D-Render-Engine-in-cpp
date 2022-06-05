@@ -1,5 +1,6 @@
 #include "Header Files/Vector3.h"
 #include "Header Files/Color.h"
+#include "Header Files/Camera.h"
 #include "Header Files/Material.h"
 #include "Header Files/Light.h"
 #include "Header Files/Object.h"
@@ -16,8 +17,12 @@ int main()
 {
 	int WIDTH = 320;
 	int HEIGHT = 200;
+	int STARTFRAME = 1;
+	int ENDFRAME = 1;
+	int NUMBEROFSAMPLES = 100;
+	float FOCALLENGTH = 0.1;
 
-	Vector3 camera(0, 0.35, 1);
+	Camera camera(Vector3(0, 0.35, 1), WIDTH, HEIGHT, STARTFRAME, ENDFRAME, NUMBEROFSAMPLES, FOCALLENGTH);
 
 	vector<Light> lights;
 
@@ -39,13 +44,11 @@ int main()
 
 	objects.push_back(Object(Vector3(-0.75, 0.1, -2.25), 0.6, pinkDiffuseShiny));
 
-	Scene scene(&camera, &lights, &objects, WIDTH, HEIGHT);
+	Scene scene(&camera, &lights, &objects);
 
 	RenderEngine debugEngine(scene, 1);
 
-	RenderEngine engine(scene);
-
-	engine.outputImage(fileTypes::PPM, 8);
+	debugEngine.outputImage(fileTypes::PPM, 8);
 
 	return 0;
 }

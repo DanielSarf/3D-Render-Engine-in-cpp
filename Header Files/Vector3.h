@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include "Utilities.h"
+
 class Vector3
 {
 protected:
@@ -11,6 +13,8 @@ public:
 	Vector3(float = 0, float = 0, float = 0);
 
 	Vector3 operator+(Vector3) const;
+
+	Vector3 operator-() const;
 
 	Vector3 operator-(Vector3) const;
 
@@ -39,6 +43,14 @@ public:
 	float magnitude() const;
 
 	Vector3 normalize() const;
+
+	Vector3 crossProduct(Vector3 other) const;
+
+	Vector3 random() const;
+
+	Vector3 random(float, float) const;
+
+	Vector3 randomInUnitSphere() const;
 
 	void printVector() const;
 };

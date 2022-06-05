@@ -3,33 +3,25 @@
 #include <vector>
 
 #include "Vector3.h"
+#include "Camera.h"
 #include "Light.h"
 #include "Object.h"
 
 class Scene
 {
 private:
-	Vector3* camera;
+	Camera* camera;
 	std::vector<Light>* lights;
 	std::vector<Object>* objects;
-	int height, width;
 
 public:
-	Scene(Vector3*, std::vector<Light>*, std::vector<Object>*, int, int);
+	Scene(Camera*, std::vector<Light>*, std::vector<Object>*);
 
-	void setCamera(Vector3*);
+	void setCamera(Camera*);
 
-	void setHeight(int);
-
-	void setWidth(int);
-
-	Vector3* getCamera() const;
+	Camera* getCamera() const;
 
 	std::vector<Light>* getLights() const;
 
 	std::vector<Object>* getObjects() const;
-
-	int getHeight() const;
-
-	int getWidth() const;
 };
