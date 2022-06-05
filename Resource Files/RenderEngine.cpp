@@ -1,6 +1,6 @@
 #include "../Header Files/RenderEngine.h"
 
-RenderEngine::RenderEngine(Scene &inputScene, bool timerMode) : pixels(inputScene.getCamera()->getWidth(), inputScene.getCamera()->getHeight())
+RenderEngine::RenderEngine(Scene &inputScene, int depth, bool timerMode) : pixels(inputScene.getCamera()->getWidth(), inputScene.getCamera()->getHeight())
 {
 	camera = inputScene.getCamera();
 
@@ -27,7 +27,7 @@ RenderEngine::RenderEngine(Scene &inputScene, bool timerMode) : pixels(inputScen
 
 		auto start = std::chrono::high_resolution_clock::now();
 
-		render(inputScene, timerMode);
+		render(inputScene, timerMode, depth);
 
 		auto stop = std::chrono::high_resolution_clock::now();
 
@@ -38,7 +38,7 @@ RenderEngine::RenderEngine(Scene &inputScene, bool timerMode) : pixels(inputScen
 	}
 }
 
-void RenderEngine::render(Scene& inputScene, bool timerMode) const
+void RenderEngine::render(Scene& inputScene, bool timerMode, int depth) const
 {
 	float x, y;
 
@@ -56,7 +56,7 @@ void RenderEngine::render(Scene& inputScene, bool timerMode) const
 			{
 				Ray ray(camera->getLocation(), (Vector3(x + randomFloat() / width, -y + randomFloat() / height, -camera->getFocalLength()) - camera->getLocation()));
 				
-				rayTracedColor = rayTracedColor + rayTrace(ray, inputScene);
+				rayTracedColor = rayTracedColor + rayTrace(ray, inputScene, depth);
 			}
 
 			pixels.setPixel(j, i, rayTracedColor / camera->getNumberOfSamples());
@@ -69,7 +69,7 @@ void RenderEngine::render(Scene& inputScene, bool timerMode) const
 	}
 }
 
-Color RenderEngine::rayTrace(Ray &inputRay, Scene &inputScene) const
+Color RenderEngine::rayTrace(Ray &inputRay, Scene &inputScene, int depth) const
 {
 	Color color;
 

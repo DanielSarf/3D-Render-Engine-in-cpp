@@ -20,6 +20,7 @@ int main()
 	int STARTFRAME = 1;
 	int ENDFRAME = 1;
 	int NUMBEROFSAMPLES = 100;
+	int DIFFUSEDEPTH = 3;
 	float FOCALLENGTH = 0.1;
 
 	Camera camera(Vector3(0, 0.35, 1), WIDTH, HEIGHT, STARTFRAME, ENDFRAME, NUMBEROFSAMPLES, FOCALLENGTH);
@@ -46,7 +47,7 @@ int main()
 
 	Scene scene(&camera, &lights, &objects);
 
-	RenderEngine debugEngine(scene, 1);
+	RenderEngine debugEngine(scene, DIFFUSEDEPTH, 1);
 
 	debugEngine.outputImage(fileTypes::PPM, 8);
 

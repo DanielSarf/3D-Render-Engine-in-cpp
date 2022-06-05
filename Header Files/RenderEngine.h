@@ -20,11 +20,11 @@ private:
 	Image pixels;
 
 public:
-	RenderEngine(Scene&, bool = false);
+	RenderEngine(Scene&, int, bool = false);
 
-	void render(Scene&, bool) const;
+	void render(Scene&, bool, int) const;
 
-	Color rayTrace(Ray&, Scene&) const;
+	Color rayTrace(Ray&, Scene&, int) const;
 
 	void findNearest(Object*&, float&, Ray&, Scene&) const;
 
