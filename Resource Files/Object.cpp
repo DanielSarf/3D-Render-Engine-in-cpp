@@ -16,7 +16,7 @@ float Object::intersections(Ray& ray) const
 	{
 		float distance = (-b - sqrt(discriminant)) / 2;
 
-		if (distance > 0)
+		if (distance > 0.001)
 		{
 			return distance;
 		}

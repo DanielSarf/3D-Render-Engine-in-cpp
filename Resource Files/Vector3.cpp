@@ -7,14 +7,14 @@ Vector3 Vector3::operator+(Vector3 other) const
 	return Vector3(x + other.x, y + other.y, z + other.z);
 }
 
-Vector3 Vector3::operator-() const
-{
-	return Vector3(-x , -y, -z);
-}
-
 Vector3 Vector3::operator-(Vector3 other) const
 {
 	return Vector3(x - other.x, y - other.y, z - other.z);
+}
+
+Vector3 Vector3::operator-() const
+{
+	return Vector3(-x , -y, -z);
 }
 
 Vector3 Vector3::operator*(float other) const
@@ -101,6 +101,7 @@ Vector3 Vector3::random(float min, float max) const
 	return Vector3(randomFloat(min, max), randomFloat(min, max), randomFloat(min, max));
 }
 
+//Make more Random, make efficient, make for surfrace of sphere only
 Vector3 Vector3::randomInUnitSphere() const
 {
 	while (true)

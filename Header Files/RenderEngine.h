@@ -24,7 +24,7 @@ public:
 
 	void render(Scene&, bool, int) const;
 
-	Color rayTrace(Ray&, Scene&, int) const;
+	Color rayTrace(Ray, Scene&, int) const;
 
 	void findNearest(Object*&, float&, Ray&, Scene&) const;
 

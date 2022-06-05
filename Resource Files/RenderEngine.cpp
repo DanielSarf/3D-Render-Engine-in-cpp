@@ -59,7 +59,7 @@ void RenderEngine::render(Scene& inputScene, bool timerMode, int depth) const
 				rayTracedColor = rayTracedColor + rayTrace(ray, inputScene, depth);
 			}
 
-			pixels.setPixel(j, i, rayTracedColor / camera->getNumberOfSamples());
+			pixels.setPixel(j, i, rayTracedColor / float(camera->getNumberOfSamples()));
 		}
 
 		if (!timerMode)
@@ -69,8 +69,13 @@ void RenderEngine::render(Scene& inputScene, bool timerMode, int depth) const
 	}
 }
 
-Color RenderEngine::rayTrace(Ray &inputRay, Scene &inputScene, int depth) const
+Color RenderEngine::rayTrace(Ray inputRay, Scene &inputScene, int depth) const
 {
+	if (depth <= 0)
+	{
+		return Color(0, 0, 0);
+	}
+
 	Color color;
 
 	float hitDistance = NULL;
@@ -87,9 +92,15 @@ Color RenderEngine::rayTrace(Ray &inputRay, Scene &inputScene, int depth) const
 
 	Vector3 hitNormal = (*objectHit).normal(hitPosition);
 
-	color = color + colorAt(objectHit, hitPosition, hitNormal, inputScene);
+	Vector3 target = hitNormal + Vector3().randomInUnitSphere();
 
-	return color;
+	return rayTrace(Ray(hitPosition, target), inputScene, depth - 1) / 2;
+
+	Vector3 unitDirection = inputRay.getDirection();
+	
+	float t = 0.5 * (unitDirection.getY() + 1.0);
+	
+	return (Color(1.0, 1.0, 1.0) * (1.0 - t) + Color(0.5, 0.7, 1.0) * t);
 }
 
 void RenderEngine::findNearest(Object * &objectHit, float &hitDistance, Ray &inputRay, Scene &inputScene) const
@@ -114,10 +125,13 @@ void RenderEngine::findNearest(Object * &objectHit, float &hitDistance, Ray &inp
 
 	hitDistance = minimumDistance;
 }
+	/*color = color + colorAt(objectHit, hitPosition, hitNormal, inputScene);
 
-Color RenderEngine::colorAt(Object *&objectHit, Vector3 &hitPosition, Vector3 &hitNormal, Scene &inputScene) const
+	return color;*/
+
+/*Color RenderEngine::colorAt(Object*& objectHit, Vector3& hitPosition, Vector3& hitNormal, Scene& inputScene) const
 {
-	/*Material objectMaterial = (*objectHit).getMaterial();
+	Material objectMaterial = (*objectHit).getMaterial();
 
 	Color objectColor = objectMaterial.colorAtMaterial();
 
@@ -144,8 +158,8 @@ Color RenderEngine::colorAt(Object *&objectHit, Vector3 &hitPosition, Vector3 &h
 		color = color + (*inputScene.getLights())[i].getColor() * objectMaterial.getSpecular() * pow((hitNormalDotHalfVector > 0 ? hitNormalDotHalfVector : 0), specularK);
 	}
 
-	return color;*/
-}
+	return color;
+}*/
 
 void RenderEngine::refreshSettings(Scene &inputScene)
 {

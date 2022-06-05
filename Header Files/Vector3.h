@@ -14,9 +14,9 @@ public:
 
 	Vector3 operator+(Vector3) const;
 
-	Vector3 operator-() const;
-
 	Vector3 operator-(Vector3) const;
+	
+	Vector3 operator-() const;
 
 	Vector3 operator*(float) const;
 
