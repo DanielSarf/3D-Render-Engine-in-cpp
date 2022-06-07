@@ -1,8 +1,13 @@
 #include "../Header Files/Object.h"
 
-Object::Object(Vector3 inputLocation, float inputRadius, Material inputMaterial) : location(inputLocation), radius(inputRadius), material(inputMaterial) {}
+Object::Object(Vector3 inputLocation, float inputRadius, Material inputMaterial)
+{
 
-float Object::intersections(Ray& ray) const
+}
+
+Sphere::Sphere(Vector3 inputLocation, float inputRadius, Material inputMaterial) : location(inputLocation), radius(inputRadius), material(inputMaterial) {}
+
+float Sphere::intersections(Ray& ray) const
 {
 	Vector3 sphereToRay = ray.getOrigin() - location;
 
@@ -25,12 +30,12 @@ float Object::intersections(Ray& ray) const
 	return NULL;
 }
 
-Vector3 Object::normal(Vector3 surfacePoint)
+Vector3 Sphere::normal(Vector3 surfacePoint)
 {
 	return (surfacePoint - location).normalize();
 }
 
-Material Object::getMaterial() const
+Material Sphere::getMaterial() const
 {
 	return material;
 }

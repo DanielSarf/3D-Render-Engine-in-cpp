@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <chrono>
+#include <thread>
 
 #include "Color.h"
 #include "Ray.h"
@@ -15,22 +16,22 @@ class RenderEngine
 {
 private:
 	int height, width, startFrame, endFrame;
-	float aspectRatio, x0, x1, xStep, y0, y1, yStep;
+	float viewportHeight, viewportWidth, aspectRatio;
 	Camera* camera;
 	Image pixels;
 
 public:
 	RenderEngine(Scene&, int, bool = false);
 
-	void render(Scene&, bool, int) const;
+	void render(Scene&, int, bool = false) const;
 
 	Color rayTrace(Ray, Scene&, int) const;
 
-	void findNearest(Object*&, float&, Ray&, Scene&) const;
+	void findNearest(Sphere*&, float&, Ray&, Scene&) const;
 
-	Color colorAt(Object*&, Vector3&, Vector3&, Scene&) const;
+	Color colorAt(Sphere*&, Vector3&, Vector3&, Scene&) const;
 
-	void displayProgress(float) const;
+	//void displayProgress(float) const;
 
 	void refreshSettings(Scene&);
 

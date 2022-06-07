@@ -21,5 +21,7 @@ public:
 
 	void outputPPM(std::string&, int) const;
 
+	void outputBMP(std::string&) const;
+
 	~Image();
 };

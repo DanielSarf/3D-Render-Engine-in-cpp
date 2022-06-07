@@ -50,7 +50,7 @@ public:
 
 	Vector3 random(float, float) const;
 
-	Vector3 randomInUnitSphere() const;
+	Vector3 randomPointOnUnitSphereSurface() const;
 
 	void printVector() const;
 };

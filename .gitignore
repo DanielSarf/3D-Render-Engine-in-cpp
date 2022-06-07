@@ -78,3 +78,8 @@ x64/Debug/Vector3.obj
 .vs/Raytracing Render Engine/v17/ipch/AutoPCH/2e5e56a041a5919e/SCENE.ipch
 *.ipch
 *.obj
+*.obj
+*.obj
+x64/Debug/Raytraci.b726f65e.tlog/unsuccessfulbuild
+x64/Debug/Camera.obj
+x64/Debug/Utilities.obj

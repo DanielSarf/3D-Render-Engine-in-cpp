@@ -102,7 +102,7 @@ Vector3 Vector3::random(float min, float max) const
 }
 
 //Make more Random, make efficient, make for surfrace of sphere only
-Vector3 Vector3::randomInUnitSphere() const
+Vector3 Vector3::randomPointOnUnitSphereSurface() const
 {
 	while (true)
 	{
@@ -113,7 +113,7 @@ Vector3 Vector3::randomInUnitSphere() const
 			continue;
 		}
 
-		return point;
+		return point.normalize();
 	}
 }
 

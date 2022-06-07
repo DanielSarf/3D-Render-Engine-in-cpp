@@ -9,63 +9,84 @@ RenderEngine::RenderEngine(Scene &inputScene, int depth, bool timerMode) : pixel
 
 	aspectRatio = float(width) / height;
 
-	x0 = -1;
-	x1 = 1;
-	xStep = (x1 - x0) / (width - 1);
-
-	y0 = -1 / aspectRatio;
-	y1 = 1 / aspectRatio;
-	yStep = (y1 - y0) / (height - 1);
+	viewportHeight = 2;
+	viewportWidth = viewportHeight * aspectRatio;
 
 	startFrame = camera->getStartFrame();
-
 	endFrame = camera->getEndFrame();
 
 	for (int currentFrame = startFrame; currentFrame <= endFrame; currentFrame++)
 	{
 		//keyframe(currentFrame);
 
-		auto start = std::chrono::high_resolution_clock::now();
-
-		render(inputScene, timerMode, depth);
-
-		auto stop = std::chrono::high_resolution_clock::now();
-
-		if (timerMode)
-		{
-			std::cout << "Time taken to render is: " << float(std::chrono::duration_cast<std::chrono::microseconds>(stop - start).count()) / 1000000 << " seconds\n\n";
-		}
+		render(inputScene, depth, timerMode);
 	}
 }
 
-void RenderEngine::render(Scene& inputScene, bool timerMode, int depth) const
+void RenderEngine::render(Scene& inputScene, int depth, bool timerMode) const
 {
-	float x, y;
+	auto start = std::chrono::high_resolution_clock::now();
 
-	for (int i = 0; i < height; i++)
+	const int numberOfThreads = 32;
+
+	std::thread threads[numberOfThreads];
+
+	for (int currentThread = 0; currentThread < numberOfThreads; currentThread++)
 	{
-		y = y0 + i * yStep;
-
-		for (int j = 0; j < width; j++)
-		{
-			x = x0 + j * xStep;
-
-			Color rayTracedColor(0, 0, 0);
-
-			for (int currentSample = 0; currentSample < camera->getNumberOfSamples(); currentSample++)
+		threads[currentThread] = std::thread([this](int currentThreadNumber, int numberOfThreads, Scene& inputScene, int depth)
 			{
-				Ray ray(camera->getLocation(), (Vector3(x + randomFloat() / width, -y + randomFloat() / height, -camera->getFocalLength()) - camera->getLocation()));
+				Vector3 cameraLocation = camera->getLocation();
+
+				float focalLength = -(camera->getFocalLength());
+
+				int startHeightRange = height - (height / numberOfThreads) * currentThreadNumber - 1;
+
+				int endHeightRange = startHeightRange - (height / numberOfThreads);
+
+				int startWidthRange = (width / numberOfThreads) * currentThreadNumber;
+
+				int endWidthRange = startWidthRange + (width / numberOfThreads);
 				
-				rayTracedColor = rayTracedColor + rayTrace(ray, inputScene, depth);
-			}
+				if (currentThreadNumber == numberOfThreads - 1)
+				{
+					endHeightRange = height - 1;
 
-			pixels.setPixel(j, i, rayTracedColor / float(camera->getNumberOfSamples()));
-		}
+					endWidthRange = width;
+				}
 
-		if (!timerMode)
-		{
-			displayProgress((y * aspectRatio + 1) / 2);
-		}
+				for (int j = startHeightRange; j >= endHeightRange; j--)
+				{
+					for (int i = startWidthRange; i < startWidthRange; i++)
+					{
+						Color rayTracedColor(0, 0, 0);
+
+						for (int currentSample = 0; currentSample < camera->getNumberOfSamples(); currentSample++)
+						{
+							float u = ((i + randomFloat()) / (width - 1) * 2 - 1) * aspectRatio;
+
+							float v = (j + randomFloat()) / (height - 1) * 2 - 1;
+
+							Ray ray(cameraLocation, (Vector3(u, -v, focalLength) - cameraLocation));
+				
+							rayTracedColor = rayTracedColor + rayTrace(ray, inputScene, depth);
+						}
+
+						pixels.setPixel(i, j, rayTracedColor / float(camera->getNumberOfSamples()));
+					}
+				}
+			}, currentThread, numberOfThreads, inputScene, depth);
+	}
+
+	for (int i = 0; i < numberOfThreads; i++)
+	{
+		threads[i].join();
+	}
+
+	auto stop = std::chrono::high_resolution_clock::now();
+
+	if (timerMode)
+	{
+		std::cout << "Time taken to render is: " << float(std::chrono::duration_cast<std::chrono::microseconds>(stop - start).count()) / 1000000 << " seconds\n\n";
 	}
 }
 
@@ -79,31 +100,33 @@ Color RenderEngine::rayTrace(Ray inputRay, Scene &inputScene, int depth) const
 	Color color;
 
 	float hitDistance = NULL;
-	Object* objectHit = NULL;
+
+	// TODO: Make it possible for different Object types
+	Sphere* objectHit = NULL;
 
 	findNearest(objectHit, hitDistance, inputRay, inputScene);
 
 	if (objectHit == NULL)
 	{
-		return color;
+		//HDRI
+
+		Vector3 unitDirection = inputRay.getDirection();
+
+		float t = 0.5 * (unitDirection.getY() + 1.0);
+
+		return (Color(1.0, 1.0, 1.0) * (1.0 - t) + Color(0.5, 0.7, 1.0) * t);
 	}
 
 	Vector3 hitPosition = inputRay.hitPosition(hitDistance);
 
 	Vector3 hitNormal = (*objectHit).normal(hitPosition);
 
-	Vector3 target = hitNormal + Vector3().randomInUnitSphere();
+	Vector3 target = hitNormal + Vector3().randomPointOnUnitSphereSurface();
 
 	return rayTrace(Ray(hitPosition, target), inputScene, depth - 1) / 2;
-
-	Vector3 unitDirection = inputRay.getDirection();
-	
-	float t = 0.5 * (unitDirection.getY() + 1.0);
-	
-	return (Color(1.0, 1.0, 1.0) * (1.0 - t) + Color(0.5, 0.7, 1.0) * t);
 }
 
-void RenderEngine::findNearest(Object * &objectHit, float &hitDistance, Ray &inputRay, Scene &inputScene) const
+void RenderEngine::findNearest(Sphere * &objectHit, float &hitDistance, Ray &inputRay, Scene &inputScene) const
 {
 	float minimumDistance = NULL;
 
@@ -125,46 +148,15 @@ void RenderEngine::findNearest(Object * &objectHit, float &hitDistance, Ray &inp
 
 	hitDistance = minimumDistance;
 }
-	/*color = color + colorAt(objectHit, hitPosition, hitNormal, inputScene);
 
-	return color;*/
-
-/*Color RenderEngine::colorAt(Object*& objectHit, Vector3& hitPosition, Vector3& hitNormal, Scene& inputScene) const
+Color RenderEngine::colorAt(Sphere*& objectHit, Vector3& hitPosition, Vector3& hitNormal, Scene& inputScene) const
 {
-	Material objectMaterial = (*objectHit).getMaterial();
-
-	Color objectColor = objectMaterial.colorAtMaterial();
-
-	Vector3 toCam = inputScene.getCamera()->getLocation() - hitPosition;
-
-	float specularK = 50;
-
-	Color color = Color() + objectMaterial.getAmbient();
-
-	size_t numberOfLights = (*inputScene.getLights()).size();
-	
-	for (size_t i = 0; i < numberOfLights; i++)
-	{
-		Ray toLight(hitPosition, (*inputScene.getLights())[i].getLocation() - hitPosition);
-
-		float hitNormalDotToLightDirection = hitNormal.dotProduct(toLight.getDirection());
-
-		color = color + objectColor * objectMaterial.getDiffuse() * (hitNormalDotToLightDirection > 0 ? hitNormalDotToLightDirection : 0);
-
-		Vector3 halfVector = (toLight.getDirection() + toCam).normalize();
-
-		float hitNormalDotHalfVector = hitNormal.dotProduct(halfVector);
-
-		color = color + (*inputScene.getLights())[i].getColor() * objectMaterial.getSpecular() * pow((hitNormalDotHalfVector > 0 ? hitNormalDotHalfVector : 0), specularK);
-	}
-
-	return color;
-}*/
+	return Color();
+}
 
 void RenderEngine::refreshSettings(Scene &inputScene)
 {
 	pixels.~Image();
-
 	pixels = Image(inputScene.getCamera()->getWidth(), inputScene.getCamera()->getHeight());
 
 	height = camera->getHeight();
@@ -172,37 +164,31 @@ void RenderEngine::refreshSettings(Scene &inputScene)
 
 	aspectRatio = float(width) / height;
 
-	x0 = -1;
-	x1 = 1;
-	xStep = (x1 - x0) / (width - 1);
-
-	y0 = -1 / aspectRatio;
-	y1 = 1 / aspectRatio;
-	yStep = (y1 - y0) / (height - 1);
+	viewportHeight = 2;
+	viewportWidth = viewportHeight * aspectRatio;
 
 	startFrame = camera->getStartFrame();
-
 	endFrame = camera->getEndFrame();
 }
 
-void RenderEngine::displayProgress(float normalizedProgress) const
-{
-	int barWidth = 70;
-
-	std::cout << "[";
-
-	int pos = int(barWidth * normalizedProgress);
-
-	for (int i = 0; i < barWidth; ++i) {
-		if (i < pos) std::cout << "=";
-		else if (i == pos) std::cout << ">";
-		else std::cout << " ";
-	}
-
-	std::cout << "] " << int(normalizedProgress * 100) << " %\r";
-
-	std::cout.flush();
-}
+//void RenderEngine::displayProgress(float normalizedProgress) const
+//{
+//	int barWidth = 70;
+//
+//	std::cout << "[";
+//
+//	int pos = int(barWidth * normalizedProgress);
+//
+//	for (int i = 0; i < barWidth; ++i) {
+//		if (i < pos) std::cout << "=";
+//		else if (i == pos) std::cout << ">";
+//		else std::cout << " ";
+//	}
+//
+//	std::cout << "] " << int(normalizedProgress * 100) << " %\r";
+//
+//	std::cout.flush();
+//}
 
 void RenderEngine::outputImage(fileTypes inputFileType, int inputBitDepth)
 {

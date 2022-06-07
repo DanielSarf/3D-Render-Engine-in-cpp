@@ -12,10 +12,10 @@ class Scene
 private:
 	Camera* camera;
 	std::vector<Light>* lights;
-	std::vector<Object>* objects;
+	std::vector<Sphere>* objects;
 
 public:
-	Scene(Camera*, std::vector<Light>*, std::vector<Object>*);
+	Scene(Camera*, std::vector<Light>*, std::vector<Sphere>*);
 
 	void setCamera(Camera*);
 
@@ -23,5 +23,5 @@ public:
 
 	std::vector<Light>* getLights() const;
 
-	std::vector<Object>* getObjects() const;
+	std::vector<Sphere>* getObjects() const;
 };

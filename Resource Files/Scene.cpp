@@ -1,6 +1,6 @@
 #include "../Header Files/Scene.h"
 
-Scene::Scene(Camera* inputCamera, std::vector<Light>* inputLights, std::vector<Object>* inputObjects) : camera(inputCamera), lights(inputLights), objects(inputObjects) {}
+Scene::Scene(Camera* inputCamera, std::vector<Light>* inputLights, std::vector<Sphere>* inputObjects) : camera(inputCamera), lights(inputLights), objects(inputObjects) {}
 
 void Scene::setCamera(Camera* inputCamera)
 {
@@ -17,7 +17,7 @@ std::vector<Light>* Scene::getLights() const
 	return lights;
 }
 
-std::vector<Object>* Scene::getObjects() const
+std::vector<Sphere>* Scene::getObjects() const
 {
 	return objects;
 }

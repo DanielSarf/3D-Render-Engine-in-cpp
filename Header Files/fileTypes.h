@@ -2,5 +2,5 @@
 
 enum class fileTypes
 {
-	PPM
+	PPM, BMP
 };
