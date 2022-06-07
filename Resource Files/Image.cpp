@@ -28,6 +28,11 @@ void Image::writeFile(fileTypes inputFileType, int inputBitDepth) const
 	{
 		outputPPM(nameOfFile, inputBitDepth);
 	}
+
+	if (inputFileType == fileTypes::BMP)
+	{
+		outputBMP(nameOfFile);
+	}
 }
 
 std::string Image::generateFileName(fileTypes inputFileType) const
@@ -48,6 +53,11 @@ std::string Image::generateFileName(fileTypes inputFileType) const
 		nameOfFile.append(".ppm");
 	}
 
+	if (inputFileType == fileTypes::BMP)
+	{
+		nameOfFile.append(".bmp");
+	}
+
 	return nameOfFile;
 }
 
@@ -65,12 +75,60 @@ void Image::outputPPM(std::string &nameOfFile, int inputBitDepth) const
 	{
 		for (int w = 0; w < width; w++)
 		{
-			 imageFile << clamp(pixels[h][w].getX(), 0, 1) * maxColorValue
-				<< " " << clamp(pixels[h][w].getY(), 0, 1) * maxColorValue
-				<< " " << clamp(pixels[h][w].getZ(), 0, 1) * maxColorValue << " ";
+			 imageFile << sqrt(clamp(pixels[h][w].getX(), 0, 1)) * maxColorValue
+				<< " " << sqrt(clamp(pixels[h][w].getY(), 0, 1)) * maxColorValue
+				<< " " << sqrt(clamp(pixels[h][w].getZ(), 0, 1)) * maxColorValue << " ";
 		}
 
 		imageFile << std::endl;
+	}
+
+	imageFile.close();
+}
+
+void Image::outputBMP(std::string& nameOfFile) const
+{
+	std::ofstream imageFile;
+
+	imageFile.open(nameOfFile, std::ios::binary);
+
+	int filesize = 54 + 3 * width * height;
+
+	unsigned char bmpfileheader[14] = { 'B','M', 0,0,0,0, 0,0, 0,0, 54,0,0,0 };
+	unsigned char bmpinfoheader[40] = { 40,0,0,0, 0 ,0,0,0, 0,0,0,0, 1,0, 24,0 };
+	unsigned char bmppad[3] = { 0,0,0 };
+
+	bmpfileheader[2] = (unsigned char)(filesize);
+	bmpfileheader[3] = (unsigned char)(filesize >> 8);
+	bmpfileheader[4] = (unsigned char)(filesize >> 16);
+	bmpfileheader[5] = (unsigned char)(filesize >> 24);
+
+	bmpinfoheader[4] = (unsigned char)(width);
+	bmpinfoheader[5] = (unsigned char)(width >> 8);
+	bmpinfoheader[6] = (unsigned char)(width >> 16);
+	bmpinfoheader[7] = (unsigned char)(width >> 24);
+	bmpinfoheader[8] = (unsigned char)(height);
+	bmpinfoheader[9] = (unsigned char)(height >> 8);
+	bmpinfoheader[10] = (unsigned char)(height >> 16);
+	bmpinfoheader[11] = (unsigned char)(height >> 24);
+
+	imageFile.write(reinterpret_cast<char *>(bmpfileheader), 14);
+	imageFile.write(reinterpret_cast<char*>(bmpinfoheader), 40);
+
+	for (int h = height - 1; h >= 0; h--)
+	{
+		for (int w = 0; w < width; w++)
+		{
+			unsigned char b = sqrt(clamp(pixels[h][w].getZ(), 0, 1)) * 255;
+			unsigned char g = sqrt(clamp(pixels[h][w].getY(), 0, 1)) * 255;
+			unsigned char r = sqrt(clamp(pixels[h][w].getX(), 0, 1)) * 255;
+
+			unsigned char color[3] = { b, g, r };
+			
+			imageFile.write(reinterpret_cast<char*>(color), 3);
+		}
+
+		imageFile.write(reinterpret_cast<char*>(bmppad), (4 - (width * 3) % 4) % 4);
 	}
 
 	imageFile.close();
