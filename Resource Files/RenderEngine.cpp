@@ -51,7 +51,7 @@ void RenderEngine::render(Scene& inputScene, int depth, bool timerMode) const
 				{
 					endHeightRange = height - 1;
 
-					endWidthRange = width;
+					endWidthRange = 0;
 				}
 
 				for (int j = startHeightRange; j >= endHeightRange; j--)
