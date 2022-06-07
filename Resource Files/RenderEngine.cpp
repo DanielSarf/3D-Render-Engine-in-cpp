@@ -2,7 +2,7 @@
 
 RenderEngine::RenderEngine(Scene &inputScene) : scene(inputScene), pixels(inputScene.getCamera()->getWidth(), inputScene.getCamera()->getHeight())
 {
-	camera = scene.getCamera();
+	camera = inputScene.getCamera();
 
 	height = camera->getHeight();
 	width = camera->getWidth();
@@ -17,6 +17,8 @@ RenderEngine::RenderEngine(Scene &inputScene) : scene(inputScene), pixels(inputS
 
 	//for (int currentFrame = startFrame; currentFrame <= endFrame; currentFrame++)
 	//{
+	//	//keyframe(currentFrame);
+
 	//	render(depth, timerMode);
 	//}
 }
@@ -31,16 +33,11 @@ void RenderEngine::render(int depth, bool timerMode) const
 
 	for (int currentThread = 0; currentThread < numberOfThreads; currentThread++)
 	{
-		threads[currentThread] = 
-			std::thread([this](int currentThreadNumber, int numberOfThreads, int depth)
+		threads[currentThread] = std::thread([this](int currentThreadNumber, int numberOfThreads, int depth)
 			{
 				Vector3 cameraLocation = camera->getLocation();
 
 				float focalLength = -(camera->getFocalLength());
-
-				int startHeightRange = height - (height / numberOfThreads) * currentThreadNumber - 1;
-
-				int endHeightRange = startHeightRange - (height / numberOfThreads);
 
 				int startWidthRange = (width / numberOfThreads) * currentThreadNumber;
 
@@ -48,14 +45,12 @@ void RenderEngine::render(int depth, bool timerMode) const
 				
 				if (currentThreadNumber == numberOfThreads - 1)
 				{
-					endHeightRange = height - 1;
-
-					endWidthRange = 0;
+					endWidthRange = width;
 				}
 
-				for (int j = startHeightRange; j >= endHeightRange; j--)
+				for (int j = height - 1; j >= 0; j--)
 				{
-					for (int i = startWidthRange; i < startWidthRange; i++)
+					for (int i = startWidthRange; i < endWidthRange; i++)
 					{
 						Color rayTracedColor(0, 0, 0);
 
@@ -68,9 +63,9 @@ void RenderEngine::render(int depth, bool timerMode) const
 							Ray ray(cameraLocation, (Vector3(u, -v, focalLength) - cameraLocation));
 				
 							rayTracedColor = rayTracedColor + rayTrace(ray, depth);
-						}
 
-						pixels.setPixel(i, j, rayTracedColor / float(camera->getNumberOfSamples()));
+							pixels.setPixel(i, j, rayTracedColor / float(currentSample + 1));
+						}
 					}
 				}
 			}, currentThread, numberOfThreads, depth);
@@ -158,7 +153,7 @@ void RenderEngine::refreshSettings(Scene &inputScene)
 	scene = inputScene;
 
 	pixels.~Image();
-	pixels = Image(scene.getCamera()->getWidth(), scene.getCamera()->getHeight());
+	pixels = Image(inputScene.getCamera()->getWidth(), inputScene.getCamera()->getHeight());
 
 	height = camera->getHeight();
 	width = camera->getWidth();

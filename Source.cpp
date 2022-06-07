@@ -15,8 +15,8 @@ using namespace std;
 
 int main()
 {
-	int WIDTH = 320;
-	int HEIGHT = 200;
+	int WIDTH = 1920;
+	int HEIGHT = 1080;
 	int STARTFRAME = 1;
 	int ENDFRAME = 1;
 	int NUMBEROFSAMPLES = 100;

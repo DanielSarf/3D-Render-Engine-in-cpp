@@ -83,3 +83,12 @@ x64/Debug/Vector3.obj
 x64/Debug/Raytraci.b726f65e.tlog/unsuccessfulbuild
 x64/Debug/Camera.obj
 x64/Debug/Utilities.obj
+x64/Release/Raytraci.b726f65e.tlog/CL.command.1.tlog
+*.tlog
+*.iobj
+*.ipdb
+*.recipe
+x64/Release/Raytracing Render Engine.vcxproj.FileListAbsolute.txt
+*.log
+*.pdb
+x64/Release/Raytracing Render Engine.exe
