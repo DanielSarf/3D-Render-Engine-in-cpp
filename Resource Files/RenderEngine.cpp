@@ -1,8 +1,8 @@
 #include "../Header Files/RenderEngine.h"
 
-RenderEngine::RenderEngine(Scene &inputScene, int depth, bool timerMode) : pixels(inputScene.getCamera()->getWidth(), inputScene.getCamera()->getHeight())
+RenderEngine::RenderEngine(Scene &inputScene) : scene(inputScene), pixels(inputScene.getCamera()->getWidth(), inputScene.getCamera()->getHeight())
 {
-	camera = inputScene.getCamera();
+	camera = scene.getCamera();
 
 	height = camera->getHeight();
 	width = camera->getWidth();
@@ -15,15 +15,13 @@ RenderEngine::RenderEngine(Scene &inputScene, int depth, bool timerMode) : pixel
 	startFrame = camera->getStartFrame();
 	endFrame = camera->getEndFrame();
 
-	for (int currentFrame = startFrame; currentFrame <= endFrame; currentFrame++)
-	{
-		//keyframe(currentFrame);
-
-		render(inputScene, depth, timerMode);
-	}
+	//for (int currentFrame = startFrame; currentFrame <= endFrame; currentFrame++)
+	//{
+	//	render(depth, timerMode);
+	//}
 }
 
-void RenderEngine::render(Scene& inputScene, int depth, bool timerMode) const
+void RenderEngine::render(int depth, bool timerMode) const
 {
 	auto start = std::chrono::high_resolution_clock::now();
 
@@ -33,7 +31,8 @@ void RenderEngine::render(Scene& inputScene, int depth, bool timerMode) const
 
 	for (int currentThread = 0; currentThread < numberOfThreads; currentThread++)
 	{
-		threads[currentThread] = std::thread([this](int currentThreadNumber, int numberOfThreads, Scene& inputScene, int depth)
+		threads[currentThread] = 
+			std::thread([this](int currentThreadNumber, int numberOfThreads, int depth)
 			{
 				Vector3 cameraLocation = camera->getLocation();
 
@@ -68,13 +67,13 @@ void RenderEngine::render(Scene& inputScene, int depth, bool timerMode) const
 
 							Ray ray(cameraLocation, (Vector3(u, -v, focalLength) - cameraLocation));
 				
-							rayTracedColor = rayTracedColor + rayTrace(ray, inputScene, depth);
+							rayTracedColor = rayTracedColor + rayTrace(ray, depth);
 						}
 
 						pixels.setPixel(i, j, rayTracedColor / float(camera->getNumberOfSamples()));
 					}
 				}
-			}, currentThread, numberOfThreads, inputScene, depth);
+			}, currentThread, numberOfThreads, depth);
 	}
 
 	for (int i = 0; i < numberOfThreads; i++)
@@ -90,7 +89,7 @@ void RenderEngine::render(Scene& inputScene, int depth, bool timerMode) const
 	}
 }
 
-Color RenderEngine::rayTrace(Ray inputRay, Scene &inputScene, int depth) const
+Color RenderEngine::rayTrace(Ray inputRay, int depth) const
 {
 	if (depth <= 0)
 	{
@@ -104,7 +103,7 @@ Color RenderEngine::rayTrace(Ray inputRay, Scene &inputScene, int depth) const
 	// TODO: Make it possible for different Object types
 	Sphere* objectHit = NULL;
 
-	findNearest(objectHit, hitDistance, inputRay, inputScene);
+	findNearest(objectHit, hitDistance, inputRay);
 
 	if (objectHit == NULL)
 	{
@@ -123,41 +122,43 @@ Color RenderEngine::rayTrace(Ray inputRay, Scene &inputScene, int depth) const
 
 	Vector3 target = hitNormal + Vector3().randomPointOnUnitSphereSurface();
 
-	return rayTrace(Ray(hitPosition, target), inputScene, depth - 1) / 2;
+	return rayTrace(Ray(hitPosition, target), depth - 1) / 2;
 }
 
-void RenderEngine::findNearest(Sphere * &objectHit, float &hitDistance, Ray &inputRay, Scene &inputScene) const
+void RenderEngine::findNearest(Sphere * &objectHit, float &hitDistance, Ray &inputRay) const
 {
 	float minimumDistance = NULL;
 
-	size_t numberOfObjects = (*inputScene.getObjects()).size();
+	size_t numberOfObjects = (*scene.getObjects()).size();
 
 	for (size_t i = 0; i < numberOfObjects; i++)
 	{
 		float distance = NULL;
 
-		distance = (*inputScene.getObjects())[i].intersections(inputRay);
+		distance = (*scene.getObjects())[i].intersections(inputRay);
 
 		if (distance != NULL && (objectHit == NULL || distance < minimumDistance))
 		{
 			minimumDistance = distance;
 
-			objectHit = &(*inputScene.getObjects())[i];
+			objectHit = &(*scene.getObjects())[i];
 		}
 	}
 
 	hitDistance = minimumDistance;
 }
 
-Color RenderEngine::colorAt(Sphere*& objectHit, Vector3& hitPosition, Vector3& hitNormal, Scene& inputScene) const
+Color RenderEngine::colorAt(Sphere*& objectHit, Vector3& hitPosition, Vector3& hitNormal) const
 {
 	return Color();
 }
 
 void RenderEngine::refreshSettings(Scene &inputScene)
 {
+	scene = inputScene;
+
 	pixels.~Image();
-	pixels = Image(inputScene.getCamera()->getWidth(), inputScene.getCamera()->getHeight());
+	pixels = Image(scene.getCamera()->getWidth(), scene.getCamera()->getHeight());
 
 	height = camera->getHeight();
 	width = camera->getWidth();

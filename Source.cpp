@@ -47,7 +47,9 @@ int main()
 
 	Scene scene(&camera, &lights, &objects);
 
-	RenderEngine debugEngine(scene, DIFFUSEDEPTH, 1);
+	RenderEngine debugEngine(scene);
+
+	debugEngine.render(DIFFUSEDEPTH, true);
 
 	debugEngine.outputImage(fileTypes::BMP, 8);
 

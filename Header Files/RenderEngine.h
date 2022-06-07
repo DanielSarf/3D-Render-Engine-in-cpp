@@ -19,17 +19,18 @@ private:
 	float viewportHeight, viewportWidth, aspectRatio;
 	Camera* camera;
 	Image pixels;
+	Scene scene;
 
 public:
-	RenderEngine(Scene&, int, bool = false);
+	RenderEngine(Scene&);
 
-	void render(Scene&, int, bool = false) const;
+	void render(int, bool = false) const;
 
-	Color rayTrace(Ray, Scene&, int) const;
+	Color rayTrace(Ray, int) const;
 
-	void findNearest(Sphere*&, float&, Ray&, Scene&) const;
+	void findNearest(Sphere*&, float&, Ray&) const;
 
-	Color colorAt(Sphere*&, Vector3&, Vector3&, Scene&) const;
+	Color colorAt(Sphere*&, Vector3&, Vector3&) const;
 
 	//void displayProgress(float) const;
 
