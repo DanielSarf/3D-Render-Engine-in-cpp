@@ -101,20 +101,24 @@ Vector3 Vector3::random(float min, float max) const
 	return Vector3(randomFloat(min, max), randomFloat(min, max), randomFloat(min, max));
 }
 
-//Make more Random, make efficient, make for surfrace of sphere only
+//Vector3 Vector3::randomPointOnUnitSphereSurface() const
+//{
+//	while (true)
+//	{
+//		Vector3 point = random(-1, 1);
+//		
+//		if (point.dotProduct() >= 1)
+//		{
+//			continue;
+//		}
+//
+//		return point.normalize();
+//	}
+//}
+
 Vector3 Vector3::randomPointOnUnitSphereSurface() const
 {
-	while (true)
-	{
-		Vector3 point = random(-1, 1);
-		
-		if (point.dotProduct() >= 1)
-		{
-			continue;
-		}
-
-		return point.normalize();
-	}
+	return random(-1, 1).normalize();
 }
 
 void Vector3::printVector() const
