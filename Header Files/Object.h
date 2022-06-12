@@ -8,14 +8,17 @@
 //Wrapper class
 class Object
 {
+protected:
+	Vector3 location;
+
 public:
-	Object(Vector3 = Vector3(), float = 1, Material = Material());
+	//Constructor sets location
+	Object(Vector3 = Vector3());
 };
 
 class Sphere : public Object
 {
 private:
-	Vector3 location;
 	float radius;
 	Material material;
 

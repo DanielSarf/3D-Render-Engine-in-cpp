@@ -1,11 +1,8 @@
 #include "../Header Files/Object.h"
 
-Object::Object(Vector3 inputLocation, float inputRadius, Material inputMaterial)
-{
+Object::Object(Vector3 inputLocation) : location(inputLocation) {}
 
-}
-
-Sphere::Sphere(Vector3 inputLocation, float inputRadius, Material inputMaterial) : location(inputLocation), radius(inputRadius), material(inputMaterial) {}
+Sphere::Sphere(Vector3 inputLocation, float inputRadius, Material inputMaterial) : Object(inputLocation), radius(inputRadius), material(inputMaterial) {}
 
 float Sphere::intersections(Ray& ray) const
 {
