@@ -20,43 +20,54 @@ void RenderEngine::renderCPU(int depth, bool timerMode) const
 {
 	auto start = std::chrono::high_resolution_clock::now();
 
+	//Number of threads to render on
 	const int numberOfThreads = 32;
 
+	//Makes an array of thread objects
 	std::thread threads[numberOfThreads];
 
+	//Starts threads with anonymous function
 	for (int currentThread = 0; currentThread < numberOfThreads; currentThread++)
 	{
+		//Anonymous function that runs on a thread
 		threads[currentThread] = std::thread([this](int currentThreadNumber, int numberOfThreads, int depth)
 			{
 				Vector3 cameraLocation = camera->getLocation();
 
 				float focalLength = -(camera->getFocalLength());
 
+				//Finds width range of pixels to render
 				int startWidthRange = (width / numberOfThreads) * currentThreadNumber;
 
 				int endWidthRange = startWidthRange + (width / numberOfThreads);
 				
+				//At the last iteration it sets endWidthRange = width, to make sure there is not any width left
 				if (currentThreadNumber == numberOfThreads - 1)
 				{
 					endWidthRange = width;
 				}
 
+				//Runs for each pixel
 				for (int j = height - 1; j >= 0; j--)
 				{
 					for (int i = startWidthRange; i < endWidthRange; i++)
 					{
 						Color rayTracedColor(0, 0, 0);
 
+						//Runs for each sample
 						for (int currentSample = 0; currentSample < camera->getNumberOfSamples(); currentSample++)
 						{
+							//Finds u and v coordinates to shoot ray from camera with a random offset (for anti-aliasing)
 							float u = ((i + randomFloat()) / (width - 1) * 2 - 1) * aspectRatio;
 
 							float v = (j + randomFloat()) / (height - 1) * 2 - 1;
 
+							//Sends ray from camera to u and v coordinate with focal length component setting focal length 
 							Ray ray(cameraLocation, (Vector3(u, -v, focalLength) - cameraLocation));
 				
 							rayTracedColor = rayTracedColor + rayTrace(ray, depth);
 
+							//rayTracedColor accumulates color values, so it has to be divided by (current sample + 1)
 							pixels.setPixel(i, j, rayTracedColor / float(currentSample + 1));
 						}
 					}
@@ -79,6 +90,7 @@ void RenderEngine::renderCPU(int depth, bool timerMode) const
 
 Color RenderEngine::rayTrace(Ray inputRay, int depth) const
 {
+	//If depth is 0, function is stopped recursive function returns black color
 	if (depth <= 0)
 	{
 		return Color(0, 0, 0);
@@ -93,6 +105,7 @@ Color RenderEngine::rayTrace(Ray inputRay, int depth) const
 
 	findNearest(objectHit, hitDistance, inputRay);
 
+	//If object is not hit, returns color of HDRI
 	if (objectHit == NULL)
 	{
 		//HDRI
@@ -108,6 +121,7 @@ Color RenderEngine::rayTrace(Ray inputRay, int depth) const
 
 	Vector3 hitNormal = (*objectHit).normal(hitPosition);
 
+	//Target is the next direction the ray should bounce off to
 	Vector3 target = hitNormal + Vector3().randomPointOnUnitSphereSurface();
 
 	return rayTrace(Ray(hitPosition, target), depth - 1) / 2;
@@ -119,12 +133,14 @@ void RenderEngine::findNearest(Sphere * &objectHit, float &hitDistance, Ray &inp
 
 	size_t numberOfObjects = (*scene.getObjects()).size();
 
+	//Iterates over objects in Sphere vector
 	for (size_t i = 0; i < numberOfObjects; i++)
 	{
 		float distance = NULL;
 
 		distance = (*scene.getObjects())[i].intersections(inputRay);
 
+		//Finds minimum distance out of all distances
 		if (distance != NULL && (objectHit == NULL || distance < minimumDistance))
 		{
 			minimumDistance = distance;
