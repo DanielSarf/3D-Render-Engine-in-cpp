@@ -118,6 +118,7 @@ Vector3 Vector3::random(float min, float max) const
 
 Vector3 Vector3::randomPointOnUnitSphereSurface() const
 {
+	//Random point in cube from (-1, -1, -1) to (1, 1, 1) then normalizes so they are one unit away from origin i.e surface of unit sphere
 	return random(-1, 1).normalize();
 }
 

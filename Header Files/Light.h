@@ -13,8 +13,10 @@ private:
 	//int maxBounces;
 
 public:
+	//Constructor sets data members
 	Light(Vector3 = Vector3(), Color = Color(1, 1, 1), float = 1);
 
+	//Getter and setter functions:
 	void setLocation(Vector3);
 
 	void setLocation(Color inputColor);

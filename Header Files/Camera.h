@@ -10,8 +10,10 @@ private:
 	float focalLength;
 
 public:
+	//Constructor sets values of all data memebers
 	Camera(Vector3 = Vector3(0, 0, 0), int = 1920, int = 1080, int = 1, int = 1, int = 100, float = 0);
 
+	//Getter and setter functions:
 	void setLocation(Vector3 inputLocation);
 
 	void setWidth(int);

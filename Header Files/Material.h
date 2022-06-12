@@ -12,8 +12,10 @@ private:
 	float specular;
 
 public:
+	//Constructor sets data members
 	Material(Color = Color(), Color = Color(), float = 1, float = 1);
 
+	//Getter and setter functions:
 	void setColor(Color);
 
 	void setAmbient(float);

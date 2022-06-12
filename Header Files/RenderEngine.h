@@ -24,15 +24,13 @@ private:
 public:
 	RenderEngine(Scene&);
 
-	void render(int, bool = false) const;
+	void renderCPU(int, bool = false) const;
 
 	Color rayTrace(Ray, int) const;
 
 	void findNearest(Sphere*&, float&, Ray&) const;
 
 	Color colorAt(Sphere*&, Vector3&, Vector3&) const;
-
-	//void displayProgress(float) const;
 
 	void refreshSettings(Scene&);
 

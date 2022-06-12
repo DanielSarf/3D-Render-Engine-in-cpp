@@ -14,16 +14,9 @@ RenderEngine::RenderEngine(Scene &inputScene) : scene(inputScene), pixels(inputS
 
 	startFrame = camera->getStartFrame();
 	endFrame = camera->getEndFrame();
-
-	//for (int currentFrame = startFrame; currentFrame <= endFrame; currentFrame++)
-	//{
-	//	//keyframe(currentFrame);
-
-	//	render(depth, timerMode);
-	//}
 }
 
-void RenderEngine::render(int depth, bool timerMode) const
+void RenderEngine::renderCPU(int depth, bool timerMode) const
 {
 	auto start = std::chrono::high_resolution_clock::now();
 
@@ -166,25 +159,6 @@ void RenderEngine::refreshSettings(Scene &inputScene)
 	startFrame = camera->getStartFrame();
 	endFrame = camera->getEndFrame();
 }
-
-//void RenderEngine::displayProgress(float normalizedProgress) const
-//{
-//	int barWidth = 70;
-//
-//	std::cout << "[";
-//
-//	int pos = int(barWidth * normalizedProgress);
-//
-//	for (int i = 0; i < barWidth; ++i) {
-//		if (i < pos) std::cout << "=";
-//		else if (i == pos) std::cout << ">";
-//		else std::cout << " ";
-//	}
-//
-//	std::cout << "] " << int(normalizedProgress * 100) << " %\r";
-//
-//	std::cout.flush();
-//}
 
 void RenderEngine::outputImage(fileTypes inputFileType, int inputBitDepth)
 {
