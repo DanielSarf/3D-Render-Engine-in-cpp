@@ -31,19 +31,21 @@ int main()
 
 	lights.push_back(Light(Vector3(-0.5, 10.5, 0), Color("#E6E6E6")));
 
-	Material chequeredMaterial(Color("#FF0000"));
+	Material diffuse(Color("#FF0000"));
 
-	Material blueDiffuseShiny(Color("#0000FF"));
+	Material metal(Color("#0000FF"));
 
-	Material pinkDiffuseShiny(Color("#803980"));
+	Material glass(Color("#803980"));
 
 	vector<Sphere> objects;
 
-	objects.push_back(Sphere(Vector3(0, -10000.5, -1), 10000, chequeredMaterial));
+	objects.push_back(Sphere(Vector3(0, -10000.5, -1), 10000, diffuse));
 
-	objects.push_back(Sphere(Vector3(0.75, 0.1, -1), 0.6, blueDiffuseShiny));
+	objects.push_back(Sphere(Vector3(0.75, 0.1, -1), 0.6, diffuse));
 
-	objects.push_back(Sphere(Vector3(-0.75, 0.1, -2.25), 0.6, pinkDiffuseShiny));
+	objects.push_back(Sphere(Vector3(-0.75, 0.1, -2.25), 0.6, metal));
+
+	objects.push_back(Sphere(Vector3(-2, 0.1, -2.25), 0.6, glass));
 
 	Scene scene(&camera, &lights, &objects);
 
