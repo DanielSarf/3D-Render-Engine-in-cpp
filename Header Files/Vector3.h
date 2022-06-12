@@ -31,6 +31,7 @@ public:
 	//Sets all vector components
 	void setAll(float, float , float);
 
+	//Getter and setter functions:
 	void setX(float inputX);
 
 	void setY(float inputY);

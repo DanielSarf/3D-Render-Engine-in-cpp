@@ -136,11 +136,6 @@ void RenderEngine::findNearest(Sphere * &objectHit, float &hitDistance, Ray &inp
 	hitDistance = minimumDistance;
 }
 
-Color RenderEngine::colorAt(Sphere*& objectHit, Vector3& hitPosition, Vector3& hitNormal) const
-{
-	return Color();
-}
-
 void RenderEngine::refreshSettings(Scene &inputScene)
 {
 	scene = inputScene;

@@ -22,6 +22,7 @@ private:
 	Scene scene;
 
 public:
+	//Constructor sets all the data members by using getter functions
 	RenderEngine(Scene&);
 
 	void renderCPU(int, bool = false) const;
@@ -29,8 +30,6 @@ public:
 	Color rayTrace(Ray, int) const;
 
 	void findNearest(Sphere*&, float&, Ray&) const;
-
-	Color colorAt(Sphere*&, Vector3&, Vector3&) const;
 
 	void refreshSettings(Scene&);
 

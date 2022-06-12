@@ -2,6 +2,7 @@
 
 Image::Image(int inputWidth, int inputHeight) : width(inputWidth), height(inputHeight)
 {
+	//Allocates width * height Color objects for 2D array
 	pixels = new Color * [inputHeight];
 
 	for (int h = 0; h < inputHeight; h++)
@@ -24,6 +25,7 @@ void Image::writeFile(fileTypes inputFileType, int inputBitDepth) const
 {
 	std::string nameOfFile = generateFileName(inputFileType);
 
+	//Calls function based on file type
 	if (inputFileType == fileTypes::PPM)
 	{
 		outputPPM(nameOfFile, inputBitDepth);
@@ -37,6 +39,7 @@ void Image::writeFile(fileTypes inputFileType, int inputBitDepth) const
 
 std::string Image::generateFileName(fileTypes inputFileType) const
 {
+	//Sets char array to current date and time in dmYHMS format
 	time_t curr_time;
 	tm curr_tm;
 	char date[50];
@@ -46,8 +49,10 @@ std::string Image::generateFileName(fileTypes inputFileType) const
 
 	strftime(date, 50, "%d%m%Y%H%M%S", &curr_tm);
 
+	//Char array used to make string
 	std::string nameOfFile = date;
 
+	//String has .[filetype] appended to it
 	if (inputFileType == fileTypes::PPM)
 	{
 		nameOfFile.append(".ppm");
@@ -63,12 +68,16 @@ std::string Image::generateFileName(fileTypes inputFileType) const
 
 void Image::outputPPM(std::string &nameOfFile, int inputBitDepth) const
 {
+	//Starts output file stream
 	std::ofstream imageFile;
 
+	//Creates a file with the file name
 	imageFile.open(nameOfFile);
 
+	//Calculates maximum value of the number of bits can hold
 	unsigned int maxColorValue = unsigned int(pow(2, inputBitDepth) - 1);
 
+	//Format of a .ppm file:
 	imageFile << "P3 " << width << " " << height << std::endl << maxColorValue << std::endl;
 
 	for (int h = 0; h < height; h++)
@@ -92,6 +101,7 @@ void Image::outputBMP(std::string& nameOfFile) const
 
 	imageFile.open(nameOfFile, std::ios::binary);
 
+	//Format of a .bmp file: 
 	int filesize = 54 + 3 * width * height;
 
 	unsigned char bmpfileheader[14] = { 'B','M', 0,0,0,0, 0,0, 0,0, 54,0,0,0 };
@@ -136,6 +146,7 @@ void Image::outputBMP(std::string& nameOfFile) const
 
 Image::~Image()
 {
+	//Iterates over allocated memory of 2D array and deletes it
 	for (int h = 0; h < height; h++)
 	{
 		delete[] pixels[h];

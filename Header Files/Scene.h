@@ -2,7 +2,6 @@
 
 #include <vector>
 
-#include "Vector3.h"
 #include "Camera.h"
 #include "Light.h"
 #include "Object.h"
@@ -15,8 +14,10 @@ private:
 	std::vector<Sphere>* objects;
 
 public:
+	//Constructor sets data members
 	Scene(Camera*, std::vector<Light>*, std::vector<Sphere>*);
 
+	//Getter and setter functions:
 	void setCamera(Camera*);
 
 	Camera* getCamera() const;
