@@ -26,10 +26,10 @@ void RenderEngine::renderCPU(int depth, bool timerMode) const
 	//Makes an array of thread objects
 	std::thread threads[numberOfThreads];
 
-	//Starts threads with anonymous function
+	//Starts threads with lambda function
 	for (int currentThread = 0; currentThread < numberOfThreads; currentThread++)
 	{
-		//Anonymous function that runs on a thread
+		//Lambda function that runs on a thread
 		threads[currentThread] = std::thread([this](int currentThreadNumber, int numberOfThreads, int depth)
 			{
 				Vector3 cameraLocation = camera->getLocation();
