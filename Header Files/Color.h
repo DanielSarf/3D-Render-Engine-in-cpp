@@ -14,15 +14,20 @@ public:
 
 	//Constructor sets x(r), y(g), z(b) components
 	Color(float = 0, float = 0, float = 0);
+
+	Color(float inputV3[3]);
 	
 	//Adds two colors together
-	Color operator+(Color other) const;
+	Color operator+(Color inputOther) const;
+
+	//Multiplies two colors
+	Color operator*(Color inputOther) const;
 
 	//Multiplies all components by float value
-	Color operator*(float other) const;
+	Color operator*(float inputOther) const;
 
 	//Divides all components by float value
-	Color operator/(float other) const;
+	Color operator/(float inputOther) const;
 
 	//Returns integer from a hex character like hexCharToDecInt('F') -> 15
 	int hexCharToDecInt(char) const;

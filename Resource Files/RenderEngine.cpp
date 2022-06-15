@@ -58,9 +58,9 @@ void RenderEngine::renderCPU(int depth, bool timerMode) const
 						for (int currentSample = 0; currentSample < camera->getNumberOfSamples(); currentSample++)
 						{
 							//Finds u and v coordinates to shoot ray from camera with a random offset (for anti-aliasing)
-							float u = ((i + randomFloat()) / (width - 1) * 2 - 1) * aspectRatio;
+							float u = ((i + randomfloat()) / (width - 1) * 2 - 1) * aspectRatio;
 
-							float v = (j + randomFloat()) / (height - 1) * 2 - 1;
+							float v = (j + randomfloat()) / (height - 1) * 2 - 1;
 
 							//Sends ray from camera to u and v coordinate with focal length component setting focal length 
 							Ray ray(cameraLocation, (Vector3(u, -v, focalLength) - cameraLocation));
@@ -100,13 +100,12 @@ Color RenderEngine::rayTrace(Ray inputRay, int depth) const
 
 	float hitDistance = NULL;
 
-	// TODO: Make it possible for different Object types
-	Sphere* objectHit = NULL;
+	Sphere* objectHit = nullptr;
 
 	findNearest(objectHit, hitDistance, inputRay);
 
 	//If object is not hit, returns color of HDRI
-	if (objectHit == NULL)
+	if (objectHit == nullptr)
 	{
 		//HDRI
 
@@ -114,17 +113,23 @@ Color RenderEngine::rayTrace(Ray inputRay, int depth) const
 
 		float t = 0.5 * (unitDirection.getY() + 1.0);
 
-		return (Color(1.0, 1.0, 1.0) * (1.0 - t) + Color(0.5, 0.7, 1.0) * t);
+		return (Color(0.5, 0.7, 1.0));
 	}
 
 	Vector3 hitPosition = inputRay.hitPosition(hitDistance);
 
 	Vector3 hitNormal = (*objectHit).normal(hitPosition);
 
-	//Target is the next direction the ray should bounce off to
-	Vector3 target = hitNormal + Vector3().randomPointOnUnitSphereSurface();
+	Ray scatteredRay;
 
-	return rayTrace(Ray(hitPosition, target), depth - 1) / 2;
+	Color attenuation;
+
+	if (objectHit->getMaterial()->scatter(inputRay, attenuation, hitPosition, hitNormal, scatteredRay))
+	{
+		return rayTrace(scatteredRay, depth - 1) * attenuation;
+	}
+	
+	return Color(0, 0, 0);
 }
 
 void RenderEngine::findNearest(Sphere * &objectHit, float &hitDistance, Ray &inputRay) const

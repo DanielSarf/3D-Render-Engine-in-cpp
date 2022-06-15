@@ -27,31 +27,29 @@ int main()
 	//Set Camera
 	Camera camera(Vector3(0, 0.35, 1), WIDTH, HEIGHT, STARTFRAME, ENDFRAME, NUMBEROFSAMPLES, FOCALLENGTH);
 
-	//Will add lights functionality later
 	vector<Light> lights;
 
 	/*lights.push_back(Light(Vector3(1.5, 0.5, 10)));
 
 	lights.push_back(Light(Vector3(-0.5, 10.5, 0), Color("#E6E6E6")));*/
+	
+	DiffuseMaterial blueDiffuse(Color("#0000FF"));
 
-	//Will add material functionality later
-	Material diffuse(Color("#FF0000"));
+	MetalMaterial redMetal(Color("#FF0000"));
 
-	Material metal(Color("#0000FF"));
-
-	Material glass(Color("#803980"));
+	//GlassMaterial glass(Color("#803980"));
 
 	//List of objects (currently only supports spheres)
 	vector<Sphere> objects;
 
 	//Adding Spheres
-	objects.push_back(Sphere(Vector3(0, -10000.5, -1), 10000, diffuse));
+	objects.push_back(Sphere(Vector3(0, -10000.5, -1), 10000));
 
-	objects.push_back(Sphere(Vector3(0.75, 0.1, -1), 0.6, diffuse));
+	objects.push_back(Sphere(Vector3(0.75, 0.1, -1), 0.6, &redMetal));
 
-	objects.push_back(Sphere(Vector3(-0.75, 0.1, -2.25), 0.6, metal));
+	objects.push_back(Sphere(Vector3(-0.75, 0.1, -2.25), 0.6, &blueDiffuse));
 
-	objects.push_back(Sphere(Vector3(-2, 0.1, -2.25), 0.6, glass));
+	objects.push_back(Sphere(Vector3(-2, 0.1, -2.25), 0.6));
 
 	//Scene initialization
 	Scene scene(&camera, &lights, &objects);
@@ -64,6 +62,8 @@ int main()
 
 	//Output rendered image as a .bmp file
 	debugEngine.outputImage(fileTypes::BMP, 8);
+
+	system("pause>0");
 
 	return 0;
 }

@@ -2,35 +2,45 @@
 
 #include "Vector3.h"
 #include "Color.h"
+#include "Ray.h"
 
 class Material
 {
-private:
-	Color color;
-	Color ambient;
-	float diffuse;
-	float specular;
+protected:
+	Color baseColor;
 
 public:
 	//Constructor sets data members
-	Material(Color = Color(), Color = Color(), float = 1, float = 1);
+	Material(Color = Color(1, 1, 1));
 
 	//Getter and setter functions:
-	void setColor(Color);
+	void setBaseColor(Color);
 
-	void setAmbient(float);
+	Color getBaseColor() const;
 
-	void setDiffuse(float);
+	virtual bool scatter(const Ray& inputRay, Color& attenuation, const Vector3&, const Vector3&, Ray&) const = 0;
+};
 
-	void setSpecular(float);
+class DiffuseMaterial : public Material
+{
+public:
+	DiffuseMaterial(Color = Color(1, 1, 1));
 
-	Color getColor();
+	virtual bool scatter(const Ray& inputRay, Color& attenuation, const Vector3&, const Vector3&, Ray&) const override;
+};
 
-	Color getAmbient();
+class MetalMaterial : public Material
+{
+public:
+	MetalMaterial(Color = Color(1, 1, 1));
 
-	float getDiffuse();
+	virtual bool scatter(const Ray& inputRay, Color& attenuation, const Vector3&, const Vector3&, Ray&) const override;
+};
 
-	float getSpecular();
+class GlassMaterial : public Material
+{
+public:
+	GlassMaterial(Color = Color(1, 1, 1));
 
-	Color colorAtMaterial();
+	virtual bool scatter(const Ray& inputRay, Color& attenuation, const Vector3&, const Vector3&, Ray&) const override;
 };

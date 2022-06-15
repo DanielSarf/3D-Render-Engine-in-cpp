@@ -9,7 +9,7 @@ private:
 
 public:
 	//Constructor sets origin and direction
-	Ray(Vector3, Vector3);
+	Ray(Vector3 = Vector3(), Vector3 = Vector3());
 
 	//Getter and setter functions:
 	void setOrigin(Vector3);

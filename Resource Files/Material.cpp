@@ -1,54 +1,55 @@
 #include "../Header Files/Material.h"
 
-Material::Material(Color inputColor, Color inputAmbient, float inputDiffuse, float inputSpecular)
+Material::Material(Color inputColor)
 {
-	color = inputColor;
-	ambient = inputAmbient;
-	diffuse = inputDiffuse;
-	specular = inputSpecular;
+	baseColor = inputColor;
 }
 
-void Material::setColor(Color inputColor)
+void Material::setBaseColor(Color inputColor)
 {
-	color = inputColor;
+	baseColor = inputColor;
 }
 
-void Material::setAmbient(float inputAmbient)
+Color Material::getBaseColor() const
 {
-	ambient = inputAmbient;
+	return baseColor;
 }
 
-void Material::setDiffuse(float inputDiffuse)
+DiffuseMaterial::DiffuseMaterial(Color inputColor)
 {
-	diffuse = inputDiffuse;
+    baseColor = inputColor;
 }
 
-void Material::setSpecular(float inputSpecular)
+bool DiffuseMaterial::scatter(const Ray &inputRay, Color &attenuation, const Vector3 &hitPosition, const Vector3 &hitNormal, Ray &scatteredRay) const
 {
-	specular = inputSpecular;
+    //scatterDirection is the next direction the ray should bounce off to
+    Vector3 scatterDirection = hitNormal + Vector3().randomPointOnUnitSphereSurface();
+
+    if (scatterDirection.nearZero())
+    {
+        scatterDirection = hitNormal;
+    }
+
+    scatteredRay = Ray(hitPosition, scatterDirection);
+    
+    attenuation = baseColor;
+    
+    return true;
 }
 
-Color Material::getColor()
+MetalMaterial::MetalMaterial(Color inputColor)
 {
-	return color;
+    baseColor = inputColor;
 }
 
-Color Material::getAmbient()
+bool MetalMaterial::scatter(const Ray& inputRay, Color& attenuation, const Vector3& hitPosition, const Vector3& hitNormal, Ray& scatteredRay) const
 {
-	return ambient;
-}
+    //reflectedDirection is the next direction the ray should bounce off to
+    Vector3 reflectedDirection = Vector3().reflect(inputRay.getDirection().normalize(), hitNormal);
 
-float Material::getDiffuse()
-{
-	return diffuse;
-}
+    scatteredRay = Ray(hitPosition, reflectedDirection);
 
-float Material::getSpecular()
-{
-	return specular;
-}
+    attenuation = baseColor;
 
-Color Material::colorAtMaterial()
-{
-	return color;
+    return (scatteredRay.getDirection().dotProduct(hitNormal) > 0);
 }

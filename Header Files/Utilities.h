@@ -7,12 +7,10 @@ const float infinity = std::numeric_limits<float>::infinity();
 
 const float pi = 3.1415926535897932385;
 
-float degrees_to_radians(float);
+float degrees_to_radians(float degrees);
 
-float randomFloatSmall();
+float randomfloat();
 
-float randomFloat();
+float randomfloat(float min, float max);
 
-float randomFloat(float, float);
-
-float clamp(float, float, float);
+float clamp(float x, float min, float max);

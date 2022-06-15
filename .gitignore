@@ -92,3 +92,7 @@ x64/Release/Raytracing Render Engine.vcxproj.FileListAbsolute.txt
 *.log
 *.pdb
 x64/Release/Raytracing Render Engine.exe
+*.vsidx
+*.lock
+x64/Release/_IsIncrementalBuild
+x64/Release/Vector3.nativecodeanalysis.xml

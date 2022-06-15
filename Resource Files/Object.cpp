@@ -2,7 +2,9 @@
 
 Object::Object(Vector3 inputLocation) : location(inputLocation) {}
 
-Sphere::Sphere(Vector3 inputLocation, float inputRadius, Material inputMaterial) : Object(inputLocation), radius(inputRadius), material(inputMaterial) {}
+DiffuseMaterial Object::defaultMaterial = { DiffuseMaterial(Color(0.5, 0.5, 0.5)) };
+
+Sphere::Sphere(Vector3 inputLocation, float inputRadius, Material* inputMaterial) : Object(inputLocation), radius(inputRadius), material(inputMaterial) {}
 
 float Sphere::intersections(Ray& ray) const
 {
@@ -34,7 +36,7 @@ Vector3 Sphere::normal(Vector3 surfacePoint)
 	return (surfacePoint - location).normalize();
 }
 
-Material Sphere::getMaterial() const
+Material* Sphere::getMaterial() const
 {
 	return material;
 }
