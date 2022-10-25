@@ -21,10 +21,10 @@ void RenderEngine::renderCPU(int depth, bool timerMode) const
 	auto start = std::chrono::high_resolution_clock::now();
 
 	//Number of threads to render on
-	const int numberOfThreads = 32;
+	const int numberOfThreads = (std::thread::hardware_concurrency() * 2 > 32) ? std::thread::hardware_concurrency() * 2 : 32;
 
 	//Makes an array of thread objects
-	std::thread threads[numberOfThreads];
+	std::thread *threads = new std::thread[numberOfThreads];
 
 	//Starts threads with lambda function
 	for (int currentThread = 0; currentThread < numberOfThreads; currentThread++)
@@ -34,7 +34,7 @@ void RenderEngine::renderCPU(int depth, bool timerMode) const
 			{
 				Vector3 cameraLocation = camera->getLocation();
 
-				float focalLength = -(camera->getFocalLength());
+				float focalLength = -(camera->getFocalLength()) * width * aspectRatio;
 
 				//Finds width range of pixels to render
 				int startWidthRange = (width / numberOfThreads) * currentThreadNumber;
@@ -48,19 +48,19 @@ void RenderEngine::renderCPU(int depth, bool timerMode) const
 				}
 
 				//Runs for each pixel
-				for (int j = height - 1; j >= 0; j--)
+				for (int j = height - height / 2 - 1; j >= 0 - height / 2; j--)
 				{
-					for (int i = startWidthRange; i < endWidthRange; i++)
+					for (int i = startWidthRange - width / 2; i < endWidthRange - width / 2; i++)
 					{
 						Color rayTracedColor(0, 0, 0);
 
 						//Runs for each sample
 						for (int currentSample = 0; currentSample < camera->getNumberOfSamples(); currentSample++)
 						{
-							//Finds u and v coordinates to shoot ray from camera with a random offset (for anti-aliasing)
-							float u = ((i + randomfloat()) / (width - 1) * 2 - 1) * aspectRatio;
+							//Finds u and v coordinates to shoot ray from camera with a random offset from -0.5 to 0.5 (for anti-aliasing)
+							float u = i + randomfloat() - 0.5f;
 
-							float v = (j + randomfloat()) / (height - 1) * 2 - 1;
+							float v = j + randomfloat() - 0.5f;
 
 							//Sends ray from camera to u and v coordinate with focal length component setting focal length 
 							Ray ray(cameraLocation, (Vector3(u, -v, focalLength) - cameraLocation));
@@ -68,8 +68,9 @@ void RenderEngine::renderCPU(int depth, bool timerMode) const
 							rayTracedColor = rayTracedColor + rayTrace(ray, depth);
 
 							//rayTracedColor accumulates color values, so it has to be divided by (current sample + 1)
-							pixels.setPixel(i, j, rayTracedColor / float(currentSample + 1));
 						}
+
+						pixels.setPixel(i + width / 2, j + height / 2, rayTracedColor / float(camera->getNumberOfSamples()));
 					}
 				}
 			}, currentThread, numberOfThreads, depth);
@@ -79,6 +80,8 @@ void RenderEngine::renderCPU(int depth, bool timerMode) const
 	{
 		threads[i].join();
 	}
+
+	delete[] threads;
 
 	auto stop = std::chrono::high_resolution_clock::now();
 
@@ -93,7 +96,7 @@ Color RenderEngine::rayTrace(Ray inputRay, int depth) const
 	//If depth is 0, function is stopped recursive function returns black color
 	if (depth <= 0)
 	{
-		return Color(0, 0, 0);
+		return (Color(0, 0, 0));
 	}
 
 	Color color;
@@ -109,11 +112,7 @@ Color RenderEngine::rayTrace(Ray inputRay, int depth) const
 	{
 		//HDRI
 
-		Vector3 unitDirection = inputRay.getDirection();
-
-		float t = 0.5 * (unitDirection.getY() + 1.0);
-
-		return (Color(0.5, 0.7, 1.0));
+		return (Color(0.5f, 0.7f, 1.0f));
 	}
 
 	Vector3 hitPosition = inputRay.hitPosition(hitDistance);
@@ -128,8 +127,8 @@ Color RenderEngine::rayTrace(Ray inputRay, int depth) const
 	{
 		return rayTrace(scatteredRay, depth - 1) * attenuation;
 	}
-	
-	return Color(0, 0, 0);
+
+	return (Color(0, 0, 0));
 }
 
 void RenderEngine::findNearest(Sphere * &objectHit, float &hitDistance, Ray &inputRay) const

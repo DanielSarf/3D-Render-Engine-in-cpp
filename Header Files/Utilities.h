@@ -5,7 +5,7 @@
 
 const float infinity = std::numeric_limits<float>::infinity();
 
-const float pi = 3.1415926535897932385;
+const float pi = 3.141592f;
 
 float degrees_to_radians(float degrees);
 

@@ -21,11 +21,11 @@ int main()
 	int STARTFRAME = 1;
 	int ENDFRAME = 1;
 	int NUMBEROFSAMPLES = 100;
-	int DIFFUSEDEPTH = 50;
-	float FOCALLENGTH = 0.1;
+	int DEPTH = 50;
+	float FOCALLENGTH = 0.1f;
 
 	//Set Camera
-	Camera camera(Vector3(0, 0.35, 1), WIDTH, HEIGHT, STARTFRAME, ENDFRAME, NUMBEROFSAMPLES, FOCALLENGTH);
+	Camera camera(Vector3(0.0f, 0.35f, 1.0f), WIDTH, HEIGHT, STARTFRAME, ENDFRAME, NUMBEROFSAMPLES, FOCALLENGTH);
 
 	vector<Light> lights;
 
@@ -35,7 +35,7 @@ int main()
 	
 	DiffuseMaterial blueDiffuse(Color("#0000FF"));
 
-	MetalMaterial redMetal(Color("#FF0000"));
+	MetalMaterial redMetal(Color("#FF0000"), 0.0f);
 
 	//GlassMaterial glass(Color("#803980"));
 
@@ -43,13 +43,13 @@ int main()
 	vector<Sphere> objects;
 
 	//Adding Spheres
-	objects.push_back(Sphere(Vector3(0, -10000.5, -1), 10000));
+	objects.push_back(Sphere(Vector3(0.0f, -10000.5f, -1.0f), 10000.0f));
 
-	objects.push_back(Sphere(Vector3(0.75, 0.1, -1), 0.6, &redMetal));
+	objects.push_back(Sphere(Vector3(0.75f, 0.1f, -1.0f), 0.6f, &redMetal));
 
-	objects.push_back(Sphere(Vector3(-0.75, 0.1, -2.25), 0.6, &blueDiffuse));
+	objects.push_back(Sphere(Vector3(-0.75f, 0.1f, -2.25f), 0.6f, &blueDiffuse));
 
-	objects.push_back(Sphere(Vector3(-2, 0.1, -2.25), 0.6));
+	objects.push_back(Sphere(Vector3(-2.0f, 0.1f, -2.25f), 0.6f));
 
 	//Scene initialization
 	Scene scene(&camera, &lights, &objects);
@@ -58,7 +58,7 @@ int main()
 	RenderEngine debugEngine(scene);
 
 	//Start render on CPU
-	debugEngine.renderCPU(DIFFUSEDEPTH, true);
+	debugEngine.renderCPU(DEPTH, true);
 
 	//Output rendered image as a .bmp file
 	debugEngine.outputImage(fileTypes::BMP, 8);

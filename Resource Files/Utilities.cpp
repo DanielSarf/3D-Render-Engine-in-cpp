@@ -2,7 +2,7 @@
 
 float degrees_to_radians(float degrees)
 {
-    return float(degrees) * pi / 180.0;
+    return float(degrees) * pi / 180.0f;
 }
 
 float randomfloat()

@@ -1,8 +1,9 @@
 #include "../Header Files/Material.h"
 
-Material::Material(Color inputColor)
+Material::Material(Color inputColor, float inputRoughness)
 {
 	baseColor = inputColor;
+    roughness = inputRoughness;
 }
 
 void Material::setBaseColor(Color inputColor)
@@ -10,14 +11,25 @@ void Material::setBaseColor(Color inputColor)
 	baseColor = inputColor;
 }
 
+void Material::setRoughness(float inputRoughness)
+{
+    roughness = inputRoughness;
+}
+
 Color Material::getBaseColor() const
 {
 	return baseColor;
 }
 
-DiffuseMaterial::DiffuseMaterial(Color inputColor)
+float Material::getRoughness() const
+{
+    return roughness;
+}
+
+DiffuseMaterial::DiffuseMaterial(Color inputColor, float inputRoughness)
 {
     baseColor = inputColor;
+    roughness = inputRoughness;
 }
 
 bool DiffuseMaterial::scatter(const Ray &inputRay, Color &attenuation, const Vector3 &hitPosition, const Vector3 &hitNormal, Ray &scatteredRay) const
@@ -37,9 +49,10 @@ bool DiffuseMaterial::scatter(const Ray &inputRay, Color &attenuation, const Vec
     return true;
 }
 
-MetalMaterial::MetalMaterial(Color inputColor)
+MetalMaterial::MetalMaterial(Color inputColor, float inputRoughness)
 {
     baseColor = inputColor;
+    roughness = inputRoughness;
 }
 
 bool MetalMaterial::scatter(const Ray& inputRay, Color& attenuation, const Vector3& hitPosition, const Vector3& hitNormal, Ray& scatteredRay) const
@@ -47,7 +60,7 @@ bool MetalMaterial::scatter(const Ray& inputRay, Color& attenuation, const Vecto
     //reflectedDirection is the next direction the ray should bounce off to
     Vector3 reflectedDirection = Vector3().reflect(inputRay.getDirection().normalize(), hitNormal);
 
-    scatteredRay = Ray(hitPosition, reflectedDirection);
+    scatteredRay = Ray(hitPosition, reflectedDirection + Vector3().randomPointOnUnitSphereSurface() * roughness);
 
     attenuation = baseColor;
 

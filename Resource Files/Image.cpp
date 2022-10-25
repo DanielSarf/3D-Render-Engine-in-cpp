@@ -129,9 +129,9 @@ void Image::outputBMP(std::string& nameOfFile) const
 	{
 		for (int w = 0; w < width; w++)
 		{
-			unsigned char b = sqrt(clamp(pixels[h][w].getZ(), 0, 1)) * 255;
-			unsigned char g = sqrt(clamp(pixels[h][w].getY(), 0, 1)) * 255;
-			unsigned char r = sqrt(clamp(pixels[h][w].getX(), 0, 1)) * 255;
+			unsigned char b = unsigned char(sqrt(clamp(pixels[h][w].getZ(), 0, 1)) * 255);
+			unsigned char g = unsigned char(sqrt(clamp(pixels[h][w].getY(), 0, 1)) * 255);
+			unsigned char r = unsigned char(sqrt(clamp(pixels[h][w].getX(), 0, 1)) * 255);
 
 			unsigned char color[3] = { b, g, r };
 			

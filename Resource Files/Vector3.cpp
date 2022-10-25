@@ -190,7 +190,7 @@ Vector3 Vector3::randomPointOnUnitSphereSurface() const
 
 bool Vector3::nearZero() const
 {
-	const float s = 1e-8;
+	const float s = 1e-8f;
 	
 	return (fabs(v3[0]) < s) && (fabs(v3[1]) < s) && (fabs(v3[2]) < s);
 }
