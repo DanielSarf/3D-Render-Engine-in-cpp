@@ -1,15 +1,15 @@
-#include "Header Files/Vector3.h"
-#include "Header Files/Color.h"
-#include "Header Files/Camera.h"
-#include "Header Files/Material.h"
-#include "Header Files/Light.h"
-#include "Header Files/Object.h"
-#include "Header Files/Ray.h"
-#include "Header Files/Image.h"
-#include "Header Files/Scene.h"
-#include "Header Files/RenderEngine.h"
+#include "Vector3.h"
+#include "Color.h"
+#include "Camera.h"
+#include "Material.h"
+#include "Light.h"
+#include "Object.h"
+#include "Ray.h"
+#include "Image.h"
+#include "Scene.h"
+#include "RenderEngine.h"
 
-#include "Header Files/fileTypes.h"
+#include "fileTypes.h"
 
 using namespace std;
 
