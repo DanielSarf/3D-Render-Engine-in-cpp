@@ -2,7 +2,7 @@
 
 ## Description
 
-**This started as my 2nd Semester project but my goal is to make this an open-source render engine for Blender that lets 3D artists create amazing art on low-end machines. This project is still in early development, you can see the roadmap below for my future plans for this project. Contributions are higly aprecitated!**
+**This started as my 2nd Semester project but my goal is to make this an open-source render engine for Blender that lets 3D artists create amazing art on low-end machines. This project is still in early development, you can see the roadmap below for my future plans for this project. Contributions are highly appreciated!**
 
 ## Features
 
