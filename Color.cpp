@@ -25,7 +25,7 @@ Color Color::operator+(Color inputOther) const
 
 	__m128 result = _mm_add_ps(current, other);
 
-	float r3[3];
+	float r3[4];
 
 	_mm_storeu_ps(r3, result);
 
@@ -40,7 +40,7 @@ Color Color::operator*(Color inputOther) const
 
 	__m128 result = _mm_mul_ps(current, other);
 
-	float r3[3];
+	float r3[4];
 
 	_mm_storeu_ps(r3, result);
 
@@ -55,7 +55,7 @@ Color Color::operator*(float inputOther) const
 
 	__m128 result = _mm_mul_ps(current, other);
 
-	float r3[3];
+	float r3[4];
 
 	_mm_storeu_ps(r3, result);
 
@@ -70,7 +70,7 @@ Color Color::operator/(float inputOther) const
 
 	__m128 result = _mm_div_ps(current, other);
 
-	float r3[3];
+	float r3[4];
 
 	_mm_storeu_ps(r3, result);
 
@@ -87,5 +87,5 @@ int Color::hexCharToDecInt(char inputChar) const
 	tempString[0] = inputChar;
 
 	//stoul converts character of string to specified base
-	return stoul(tempString, NULL, 16);
+	return stoul(tempString, 0, 16);
 }

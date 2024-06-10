@@ -45,7 +45,7 @@ std::string Image::generateFileName(fileTypes inputFileType) const
 	char date[50];
 
 	time(&curr_time);
-	localtime_s(&curr_tm, &curr_time);
+	localtime_r(&curr_time, &curr_tm);
 
 	strftime(date, 50, "%d%m%Y%H%M%S", &curr_tm);
 
@@ -75,7 +75,7 @@ void Image::outputPPM(std::string &nameOfFile, int inputBitDepth) const
 	imageFile.open(nameOfFile);
 
 	//Calculates maximum value of the number of bits can hold
-	unsigned int maxColorValue = unsigned int(pow(2, inputBitDepth) - 1);
+	unsigned int maxColorValue = (unsigned int)(pow(2, inputBitDepth) - 1);
 
 	//Format of a .ppm file:
 	imageFile << "P3 " << width << " " << height << std::endl << maxColorValue << std::endl;
@@ -129,9 +129,9 @@ void Image::outputBMP(std::string& nameOfFile) const
 	{
 		for (int w = 0; w < width; w++)
 		{
-			unsigned char b = unsigned char(sqrt(clamp(pixels[h][w].getZ(), 0, 1)) * 255);
-			unsigned char g = unsigned char(sqrt(clamp(pixels[h][w].getY(), 0, 1)) * 255);
-			unsigned char r = unsigned char(sqrt(clamp(pixels[h][w].getX(), 0, 1)) * 255);
+			unsigned char b = (unsigned char)(sqrt(clamp(pixels[h][w].getZ(), 0, 1)) * 255);
+			unsigned char g = (unsigned char)(sqrt(clamp(pixels[h][w].getY(), 0, 1)) * 255);
+			unsigned char r = (unsigned char)(sqrt(clamp(pixels[h][w].getX(), 0, 1)) * 255);
 
 			unsigned char color[3] = { b, g, r };
 			

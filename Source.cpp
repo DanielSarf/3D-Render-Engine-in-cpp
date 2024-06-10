@@ -22,7 +22,7 @@ int main()
 	int STARTFRAME = 1;
 	int ENDFRAME = 1;
 	int NUMBEROFSAMPLES = 100;
-	int DEPTH = 50;
+	int DEPTH = 12;
 	float FOCALLENGTH = 0.1f;
 
 	//Set Camera
@@ -63,8 +63,6 @@ int main()
 
 	//Output rendered image as a .bmp file
 	debugEngine.outputImage(fileTypes::BMP, 8);
-
-	system("pause>0");
 
 	return 0;
 }

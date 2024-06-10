@@ -22,7 +22,7 @@ Vector3 Vector3::operator+(Vector3 inputOther) const
 
 	__m128 result = _mm_add_ps(current, other);
 
-	float r3[3];
+	float r3[4];
 
 	_mm_storeu_ps(r3, result);
 
@@ -37,7 +37,7 @@ Vector3 Vector3::operator-(Vector3 inputOther) const
 
 	__m128 result = _mm_sub_ps(current, other);
 
-	float r3[3];
+	float r3[4];
 
 	_mm_storeu_ps(r3, result);
 
@@ -48,7 +48,7 @@ Vector3 Vector3::operator-() const
 {
 	__m128 result = _mm_mul_ps(_mm_set_ps(0, v3[2], v3[1], v3[0]), _mm_set1_ps(-1.0));
 
-	float r3[3];
+	float r3[4];
 
 	_mm_storeu_ps(r3, result);
 
@@ -63,7 +63,7 @@ Vector3 Vector3::operator*(float inputOther) const
 
 	__m128 result = _mm_mul_ps(current, other);
 
-	float r3[3];
+	float r3[4];
 
 	_mm_storeu_ps(r3, result);
 
@@ -78,7 +78,7 @@ Vector3 Vector3::operator/(float inputOther) const
 
 	__m128 result = _mm_div_ps(current, other);
 	
-	float r3[3];
+	float r3[4];
 
 	_mm_storeu_ps(r3, result);
 
@@ -128,11 +128,11 @@ float Vector3::dotProduct() const
 
 	__m128 result = _mm_mul_ps(current, current);
 
-	float r3[3]; 
+	float r3[4]; 
 
 	_mm_storeu_ps(r3, result);
 
-	return (r3[0] + r3[1] + r3[2]);
+	return float(r3[0] + r3[1] + r3[2]);
 }
 
 float Vector3::dotProduct(const Vector3& inputOther) const
@@ -143,7 +143,7 @@ float Vector3::dotProduct(const Vector3& inputOther) const
 
 	__m128 result = _mm_mul_ps(current, other);
 
-	float r3[3];
+	float r3[4];
 
 	_mm_storeu_ps(r3, result);
 

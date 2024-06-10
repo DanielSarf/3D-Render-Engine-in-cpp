@@ -28,7 +28,7 @@ float Sphere::intersections(Ray& ray) const
 		}
 	}
 
-	return NULL;
+	return 0;
 }
 
 Vector3 Sphere::normal(Vector3 surfacePoint)

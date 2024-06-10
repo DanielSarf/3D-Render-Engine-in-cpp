@@ -101,7 +101,7 @@ Color RenderEngine::rayTrace(Ray inputRay, int depth) const
 
 	Color color;
 
-	float hitDistance = NULL;
+	float hitDistance = -1.0f; // Initialize with an invalid distance
 
 	Sphere* objectHit = nullptr;
 
@@ -111,13 +111,12 @@ Color RenderEngine::rayTrace(Ray inputRay, int depth) const
 	if (objectHit == nullptr)
 	{
 		//HDRI
-
 		return (Color(0.5f, 0.7f, 1.0f));
 	}
 
 	Vector3 hitPosition = inputRay.hitPosition(hitDistance);
 
-	Vector3 hitNormal = (*objectHit).normal(hitPosition);
+	Vector3 hitNormal = objectHit->normal(hitPosition);
 
 	Ray scatteredRay;
 
@@ -133,23 +132,20 @@ Color RenderEngine::rayTrace(Ray inputRay, int depth) const
 
 void RenderEngine::findNearest(Sphere * &objectHit, float &hitDistance, Ray &inputRay) const
 {
-	float minimumDistance = NULL;
+	float minimumDistance = -1.0f; // Initialize with an invalid distance
 
-	size_t numberOfObjects = (*scene.getObjects()).size();
+	int numberOfObjects = scene.getObjects()->size();
 
 	//Iterates over objects in Sphere vector
-	for (size_t i = 0; i < numberOfObjects; i++)
+	for (int i = 0; i < numberOfObjects; i++)
 	{
-		float distance = NULL;
-
-		distance = (*scene.getObjects())[i].intersections(inputRay);
+		float distance = scene.getObjects()->at(i).intersections(inputRay);
 
 		//Finds minimum distance out of all distances
-		if (distance != NULL && (objectHit == NULL || distance < minimumDistance))
+		if (distance > 0 && (objectHit == nullptr || distance < minimumDistance || minimumDistance < 0))
 		{
 			minimumDistance = distance;
-
-			objectHit = &(*scene.getObjects())[i];
+			objectHit = &scene.getObjects()->at(i);
 		}
 	}
 
