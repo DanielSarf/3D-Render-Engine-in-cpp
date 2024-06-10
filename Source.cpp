@@ -23,7 +23,7 @@ int main()
 	int ENDFRAME = 1;
 	int NUMBEROFSAMPLES = 100;
 	int DEPTH = 12;
-	float FOCALLENGTH = 0.1f;
+	float FOCALLENGTH = 0.15f;
 
 	//Set Camera
 	Camera camera(Vector3(0.0f, 0.35f, 1.0f), WIDTH, HEIGHT, STARTFRAME, ENDFRAME, NUMBEROFSAMPLES, FOCALLENGTH);

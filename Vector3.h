@@ -1,8 +1,8 @@
 #pragma once
 
 #include <iostream>
-#include <xmmintrin.h>
 #include <math.h>
+#include <immintrin.h>
 
 #include "Utilities.h"
 
