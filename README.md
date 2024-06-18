@@ -19,7 +19,7 @@
 To compile on Linux, use the following command:
 
 ```sh
-g++ -g -O3 -ffast-math -march=native -funroll-loops -pthread -fopenmp Source.cpp Utilities.cpp Vector3.cpp Camera.cpp Color.cpp Material.cpp Object.cpp Scene.cpp RenderEngine.cpp Image.cpp Ray.cpp -o ${fileDirname}/3DRenderEngine.o
+g++ -g -O3 -ffast-math -march=native -funroll-loops -pthread -fopenmp Source.cpp Utilities.cpp Vector3.cpp Camera.cpp Color.cpp Material.cpp Object.cpp Scene.cpp RenderEngine.cpp Image.cpp Ray.cpp -o ./3DRenderEngine.o
 ```
 
 This command uses various optimization flags to ensure the render engine performs efficiently. It compiles multiple source files into an executable named `3DRenderEngine.o`.
